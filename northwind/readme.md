@@ -15,3 +15,7 @@ The data schema look like this:
 
 ![database schema image](https://nhogs.github.io/popoto-examples/northwind/screens/schema.png "Database schema")
 
+## Screens
+
+![product select](https://nhogs.github.io/popoto-examples/northwind/screens/select.gif)
+![product browse](https://nhogs.github.io/popoto-examples/northwind/screens/browse.gif)
