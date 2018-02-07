@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<!-- Generated with Popoto.js Configurator 1.0 -->
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html" charset="UTF-8">
+    <title>Popoto Search</title>
+    <link rel="stylesheet" href="https://popotojs.com/release/1.2.rc2/css/popoto.min.css">
+    <style>
+        .ppt-taxo__span-icon.Customer:before {
+            content: "\f007";
+            color: #8bb71a;
+        }
+
+        .ppt-taxo__span-icon.Product:before {
+            content: "\f0c3";
+            color: #8bb71a;
+        }
+
+        .ppt-taxo__span-icon.Order:before {
+            content: "\f07c";
+            color: #8bb71a;
+        }
+
+        .ppt-taxo__span-icon.Supplier:before {
+            content: "\f0ac";
+            color: #8bb71a;
+        }
+
+        .ppt-taxo__span-icon.Category:before {
+            content: "\f02c";
+            color: #8bb71a;
+        }
+
+        .ppt-link__text--value {
+            fill: white;
+        }
+
+        .ppt-segment {
+            opacity: 0.3;
+        }
+
+        .very-thin {
+            stroke-width: 1px;
+            stroke: #fef0d9;
+        }
+
+        .thin {
+            stroke-width: 13px;
+            stroke: #fdcc8a;
+        }
+
+        .medium {
+            stroke-width: 25px;
+            stroke: #fc8d59;
+        }
+
+        .thick {
+            stroke-width: 37px;
+            stroke: #e34a33;
+        }
+
+        .very-thick {
+            stroke-width: 49px;
+            stroke: #b30000;
+        }
+
+    </style>
+</head>
+<body class="ppt-body">
+<section class="ppt-section-main">
+    <div class="ppt-section-header">
+        <span class="ppt-header-span">Northwind</span> graph
+    </div>
+    <div class="ppt-container-graph">
+        <nav id="popoto-taxonomy" class="ppt-taxo-nav">
+            <!-- Label/taxonomy filter will be generated here -->
+        </nav>
+        <div id="popoto-graph" class="ppt-div-graph">
+            <!-- Graph will be generated here -->
+        </div>
+    </div>
+    <div id="popoto-cypher" class="ppt-container-cypher">
+        <!-- Cypher query viewer will be generated here -->
+    </div>
+    <div class="ppt-section-header">
+        <!-- The total results count is updated with a listener defined in script -->
+        RESULTS <span id="result-total-count" class="ppt-count"></span>
+    </div>
+    <div id="popoto-results" class="ppt-container-results">
+        <!-- Results will be generated here -->
+    </div>
+
+</section>
+<footer class="ppt-section-header">
+
+    Icons made by <a href="https://www.flaticon.com/authors/vectors-market" title="Vectors Market">Vectors
+    Market</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a> licensed by <a
+        href="http://creativecommons.org/licenses/by/3.0/" title="Creative Commons BY 3.0" target="_blank">CC 3.0
+    BY</a>
+</footer>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js" charset="utf-8"></script>
+<script src="https://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+<script src="https://popotojs.com/release/1.2.rc2/js/popoto.min.js" charset="utf-8"></script>
+<script>
+
+    // URL used to access Neo4j REST API to execute queries.
+    // popoto.rest.CYPHER_URL = "http://localhost:7474/db/data/transaction/commit";
+    // popoto.rest.AUTHORIZATION = "Basic " + btoa("neo4j:password");
+
+    popoto.rest.CYPHER_URL = "https://db-kh9ct9ai1mqn6hz2itry.graphenedb.com:24780/db/data/transaction/commit";
+    popoto.rest.AUTHORIZATION = "Basic cG9wb3RvOmIuVlJZQVF2blZjV2tyLlRaYnpmTks5aHp6SHlTdXk==";
+
+    // If set to true, the relations properties will be returned.
+    popoto.query.COLLECT_RELATIONS_WITH_VALUES = true;
+
+    // Use known min and max amount but should be extracted from data in a real application
+    var maxAmount = 141396;
+    var minAmount = 3044;
+
+    // Generate size and CSS classes scales based on data using d3.
+    var sizeScale = d3.scale.quantize().domain([minAmount, maxAmount]).range([50, 75, 100, 125, 150]);
+    var strokeCSSScale = d3.scale.quantize().domain([minAmount, maxAmount]).range(["very-thin", "thin", "medium", "thick", "very-thick"]);
+
+    // Popoto nodes provider configuration
+    popoto.provider.node.Provider = {
+        "Customer": {
+            returnAttributes: ["companyName", "customerID", "city", "country", "postalCode", "contactName", "fax", "region", "address", "contactTitle", "phone"],
+            constraintAttribute: "customerID",
+            autoExpandRelations: true,
+            "getDisplayType": function (node) {
+                return popoto.provider.node.DisplayTypes.IMAGE;
+            }
+        },
+        "Product": {
+            returnAttributes: ["productName", "categoryID", "discontinued", "unitsOnOrder", "quantityPerUnit", "reorderLevel", "supplierID", "unitsInStock", "productID", "unitPrice"],
+            constraintAttribute: "productID",
+            autoExpandRelations: true,
+            "getDisplayType": function (node) {
+                return popoto.provider.node.DisplayTypes.IMAGE;
+            },
+            "getSize": function (node) {
+                if (node.type === popoto.graph.node.NodeTypes.VALUE) {
+                    if (node.parent.parentRel === "ORDERS") {
+                        if (node.attributes.hasOwnProperty("incomingRels")) {
+                            return sizeScale(relationsAmount(node.attributes.incomingRels));
+                        }
+                    }
+                }
+
+                if (node.value !== undefined && node.value.length > 0) {
+                    if (node.parentRel === "ORDERS") {
+                        if (node.value[0].attributes.hasOwnProperty("incomingRels")) {
+                            return sizeScale(relationsAmount(node.value[0].attributes.incomingRels));
+                        }
+                    }
+                }
+
+                return 50;
+            }
+        },
+        "Order": {
+            returnAttributes: ["shipName", "customerID", "orderID", "orderDate", "shipAddress", "shipRegion", "freight", "shipCity", "shipCountry", "employeeID", "shippedDate", "requiredDate", "shipPostalCode", "shipVia"],
+            constraintAttribute: "orderID",
+            autoExpandRelations: true,
+            "getDisplayType": function (node) {
+                return popoto.provider.node.DisplayTypes.IMAGE;
+            }
+        },
+        "Supplier": {
+            returnAttributes: ["companyName", "city", "homePage", "country", "postalCode", "contactName", "supplierID", "fax", "region", "address", "contactTitle", "phone"],
+            constraintAttribute: "supplierID",
+            "getDisplayType": function (node) {
+                return popoto.provider.node.DisplayTypes.IMAGE;
+            }
+        },
+        "Category": {
+            returnAttributes: ["categoryName", "categoryID", "description"],
+            constraintAttribute: "categoryID",
+            autoExpandRelations: true,
+            "getDisplayType": function (node) {
+                return popoto.provider.node.DisplayTypes.IMAGE;
+            }
+
+        }
+    };
+
+    /**
+     * Compute the total amount earned based on a list of relations data.
+     * The count is done by doing the sum of relation amount defined by the multiplying the quantity of product sold by the product unitPrice minus the discount.
+     *
+     * @param relations the list of relations data.
+     * @return {string} the total amount.
+     */
+    function relationsAmount(relations) {
+        return relations.reduce(function (a, rel) {
+            var relAmount = rel.quantity * parseFloat(rel.unitPrice);
+            var relDiscount = rel.discount * relAmount;
+
+            return (a + relAmount - relDiscount);
+        }, 0).toFixed(2);
+    }
+
+    // Popoto links provider configuration
+    popoto.provider.link.Provider = {
+
+        // Text displayed on links
+        "getTextValue": function (link) {
+            if (link.type === popoto.graph.link.LinkTypes.VALUE && link.source.label === "Product" && link.source.parentRel === "ORDERS") {
+                if (link.target.attributes.hasOwnProperty("incomingRels")) {
+                    return relationsAmount(link.target.attributes.incomingRels) + "$";
+                }
+            }
+
+            return popoto.provider.link.DEFAULT_PROVIDER.getTextValue(link);
+        },
+
+        // CSS class added on svg links
+        "getCSSClass": function (link, element) {
+            if (link.type === popoto.graph.link.LinkTypes.VALUE && link.source.label === "Product" && link.source.parentRel === "ORDERS" && (element === "path" || element === "path--hover")) {
+                if (link.target.attributes.hasOwnProperty("incomingRels")) {
+                    return "ppt-link__" + element + "--value " + strokeCSSScale(relationsAmount(link.target.attributes.incomingRels));
+                }
+            }
+            return popoto.provider.link.DEFAULT_PROVIDER.getCSSClass(link, element);
+        }
+
+    };
+
+    // Popoto taxonomies provider configuration
+    popoto.provider.taxonomy.Provider = {
+        "getCSSClass": function (label, element) {
+            var labelAsCSSName = label.replace(/[^0-9a-z\-_]/gi, '');
+
+            var cssClass = "ppt-taxo__" + element;
+
+            return cssClass + " " + labelAsCSSName;
+        }
+    };
+
+    popoto.result.onTotalResultCount(function (count) {
+        document.getElementById("result-total-count").innerHTML = "(" + count + ")";
+    });
+
+    popoto.start("Customer");
+
+</script>
+</body>
+</html>
