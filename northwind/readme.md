@@ -1,1 +1,1 @@
-<a href="https://nhogs.github.io/popoto-examples/">https://nhogs.github.io/popoto-examples/</a>
+[![Main screenshot](https://nhogs.github.io/popoto-examples/northwind/screens/main.png "Main screenshot")](https://nhogs.github.io/popoto-examples/northwind/index.html)
