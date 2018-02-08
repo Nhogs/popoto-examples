@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Auto Complete</title>
+    <link rel="stylesheet" href="https://popotojs.com/release/1.2.rc2/css/popoto.min.css">
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-alpha.3/css/materialize.min.css">
+    <link rel="stylesheet" href="css/auto-complete.css">
+    <style>
+        #popoto-graph:fullscreen {
+            width: 100%;
+            height: 100%;
+        }
+
+        #popoto-graph:-webkit-full-screen {
+            width: 100%;
+            height: 100%;
+        }
+
+        #popoto-graph:-moz-full-screen {
+            width: 100%;
+            height: 100%;
+        }
+
+        #popoto-graph:-ms-fullscreen {
+            width: 100%;
+            height: 100%;
+        }
+    </style>
+</head>
+<body style="background-color: #2e3138;">
+
+<div class="navbar-fixed">
+    <nav style="background-color: #444951;">
+        <div class="nav-wrapper">
+            <form style="height:100%; margin-left: 8%; margin-right: 8%; background-color: #525863;"
+                  onsubmit="event.preventDefault(); return false;">
+                <div class="input-field">
+                    <input id="search" type="search" required>
+                    <label class="label-icon" for="search"><i class="material-icons">search</i></label>
+                    <i class="material-icons">close</i>
+                </div>
+            </form>
+        </div>
+    </nav>
+</div>
+
+<div class="">
+    <ul id="collapsible-components" class="collapsible popout">
+        <!-- ======================================================================================================= -->
+        <!-- GRAPH QUERY-->
+        <!-- ======================================================================================================= -->
+        <li id="p-collapsible-popoto" class="active">
+            <div class="collapsible-header white-text" style="background-color: #525863; border-bottom: 0;"><i
+                    class="ppt-icon ppt-icon-logo" style="color:#8bb71a;"></i> Graph
+                Query
+            </div>
+            <div class="collapsible-body no-padding" style="border-bottom: 0;">
+                <div id="popoto-graph" class="ppt-div-graph" style="height: 600px;">
+                </div>
+            </div>
+        </li>
+        <!-- ======================================================================================================= -->
+        <!-- QUERY -->
+        <!-- ======================================================================================================= -->
+        <li id="p-collapsible-query" class="active">
+            <div class="collapsible-header white-text" style="background-color: #525863;border-bottom: 0;"><i
+                    class="ppt-icon ppt-icon-wrench" style="color:#8bb71a;"></i>Query
+            </div>
+            <div class="collapsible-body no-padding" style="border-bottom: 0;">
+                <div id="popoto-cypher" class="ppt-container-cypher center-align">
+                </div>
+            </div>
+        </li>
+        <!-- ======================================================================================================= -->
+        <!-- RESULTS -->
+        <!-- ======================================================================================================= -->
+        <li id="p-collapsible-results" class="active">
+            <div class="collapsible-header white-text" style="background-color: #525863;border-bottom: 0;"><i
+                    class="material-icons" style="color:#8bb71a;">view_quilt</i>Results&nbsp;
+                <span class="" id="result-total-count">0</span>
+            </div>
+            <div class="collapsible-body no-padding" style="border-bottom: 0;">
+                <div class="row">
+                    <div id="popoto-results" class="col s12 cards-container">
+
+                    </div>
+                </div>
+            </div>
+        </li>
+    </ul>
+
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js" charset="utf-8"></script>
+<script src="https://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+<script src="https://popotojs.com/release/1.2.rc2/js/popoto.min.js" charset="utf-8"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-alpha.3/js/materialize.min.js"></script>
+<script src="js/auto-complete.min.js"></script>
+<script src="js/main.js"></script>
+
+<script>
+    popoto.rest.CYPHER_URL = "https://db-kh9ct9ai1mqn6hz2itry.graphenedb.com:24780/db/data/transaction/commit";
+    popoto.rest.AUTHORIZATION = "Basic cG9wb3RvOmIuVlJZQVF2blZjV2tyLlRaYnpmTks5aHp6SHlTdXk=";
+
+    popoto.graph.WHEEL_ZOOM_ENABLED = false;
+
+    popoto.provider.node.Provider = {
+        "Person": {
+            returnAttributes: ["name", "born"],
+            constraintAttribute: "name",
+            "resultOrderByAttribute": "name",
+            "valueOrderByAttribute": "name",
+            "isValueOrderAscending": true,
+            getDisplayType: function (node) {
+                return popoto.provider.node.DisplayTypes.IMAGE;
+            },
+            "getImagePath": function (node) {
+                // if (node.type === popoto.graph.node.NodeTypes.VALUE) {
+                //     return "../material/person/" + node.attributes['name'] + ".jpg"
+                // } else if (node.hasOwnProperty("value") && node.value.length > 0) {
+                //     return "../material/person/" + node.value[0].attributes['name'] + ".jpg"
+                // }
+                return 'image/node/person/person.svg';
+            },
+            "displayResults": function (pResultElmt) {
+
+                var div1 = pResultElmt.append("div").attr("style", "display: flex;");
+                div1.append("img")
+                    .attr("height", "200px")
+                    .attr("src", function (result) {
+                        return 'image/node/person/person.svg';
+                        // return "../material/person/" + result.attributes.name + ".jpg";
+                    });
+
+                var div = div1.append("div").attr("style", "margin-left: 20px;");
+                // An <h3> element containing the person name
+                div.append("h3")
+                    .text(function (result) {
+                        return result.attributes.name;
+                    });
+
+                // A <span> element with the computed age from born attribute
+                div.filter(function (result) {
+                    // Filter on attribute having born attribute value
+                    return result.attributes.born;
+                }).append("span").text(function (result) {
+                    return "Born: " + result.attributes.born;
+                });
+
+            }
+        },
+        "Movie": {
+            returnAttributes: ["title", "tagline", "released"],
+            constraintAttribute: "title",
+            getDisplayType: function (node) {
+                return popoto.provider.node.DisplayTypes.IMAGE;
+            },
+            "getImagePath": function (node) {
+                // if (node.type === popoto.graph.node.NodeTypes.VALUE) {
+                //     return "../material/movie/" + node.attributes['title'] + ".jpg"
+                // } else if (node.hasOwnProperty("value") && node.value.length > 0) {
+                //     return "../material/movie/" + node.value[0].attributes['title'] + ".jpg"
+                // }
+                return 'image/node/movie/movie.svg';
+            }
+        }
+    };
+
+    popoto.provider.link.Provider = {
+
+        // Customize the text displayed on links:
+        "getTextValue": function (link) {
+            if (link.type === popoto.graph.link.LinkTypes.RELATION || link.type === popoto.graph.link.LinkTypes.SEGMENT) {
+
+                var targetName = "";
+                if (link.type === popoto.graph.link.LinkTypes.SEGMENT) {
+                    targetName = " " + popoto.provider.node.getTextValue(link.target);
+                }
+
+                switch (link.label) {
+                    case "ACTED_IN":
+                        return "Acted in" + targetName;
+                    case "DIRECTED":
+                        return "Directed" + targetName;
+                    case "PRODUCED":
+                        return "Produced" + targetName;
+                    case "WROTE":
+                        return "Wrote" + targetName;
+                    case "FOLLOWS":
+                        return "Follows" + targetName;
+                    case "REVIEWED":
+                        return "Reviewed" + targetName;
+                    default :
+                        return "Unexpected relation"
+                }
+            } else {
+                return "";
+            }
+        }
+
+    };
+    popoto.result.onTotalResultCount(function (count) {
+        document.getElementById("result-total-count").innerHTML = "(" + count + ")";
+    });
+
+
+    function initCollapsible() {
+
+        var element = document.querySelector('#collapsible-components');
+        var collapsible = new M.Collapsible(element,
+            {
+                accordion: false,
+                onOpenEnd: function (el) {
+                    var id = el.id;
+                    if (id === "p-collapsible-popoto") {
+                        if (popoto.graph.getRootNode() !== undefined) {
+                            popoto.graph.getRootNode().px = $('#p-collapsible-popoto').width() / 2;
+                            popoto.graph.getRootNode().py = 300;
+                            popoto.updateGraph();
+                        }
+                    }
+                },
+                onCloseEnd: function (el) {
+                }
+            });
+    }
+
+    initCollapsible();
+
+    popoto.start("Person");
+
+</script>
+</body>
+</html>
