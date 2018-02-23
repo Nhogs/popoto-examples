@@ -54,7 +54,7 @@ var main = new autoComplete({
         $("#search").blur();
 
         popoto.graph.node.addRelatedValues(popoto.graph.getRootNode(), [{
-            id: "\"" + id + "\"",
+            id: id,
             rel: rel,
             label: label
         }]);
