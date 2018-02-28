@@ -3,8 +3,318 @@
 <head>
     <meta charset="UTF-8">
     <title>Factual</title>
+    <link href='https://api.mapbox.com/mapbox-gl-js/v0.44.1/mapbox-gl.css' rel='stylesheet'/>
+    <link rel="stylesheet" href="https://popotojs.com/release/1.2.rc2/css/popoto.min.css">
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-alpha.4/css/materialize.min.css">
+    <link rel="stylesheet" href="css/auto-complete.css">
+    <style>
+        #popoto-graph:fullscreen {
+            width: 100%;
+            height: 100%;
+        }
+
+        #popoto-graph:-webkit-full-screen {
+            width: 100%;
+            height: 100%;
+        }
+
+        #popoto-graph:-moz-full-screen {
+            width: 100%;
+            height: 100%;
+        }
+
+        #popoto-graph:-ms-fullscreen {
+            width: 100%;
+            height: 100%;
+        }
+    </style>
 </head>
-<body>
-Under construction!
+<body style="background-color: #2e3138;">
+
+<div class="navbar-fixed">
+    <nav style="background-color: #444951;">
+        <div class="nav-wrapper">
+            <form style="height:100%; margin-left: 8%; margin-right: 8%; background-color: #525863;"
+                  onsubmit="event.preventDefault(); return false;">
+                <div class="input-field">
+                    <input id="search" type="search" required>
+                    <label class="label-icon" for="search"><i
+                            class="ppt-icon ppt-icon-search-plus" style="color:#8bb71a;"></i></label>
+                </div>
+            </form>
+        </div>
+    </nav>
+</div>
+
+<div class="">
+    <ul id="collapsible-components" class="collapsible popout">
+        <!-- ======================================================================================================= -->
+        <!-- GRAPH QUERY-->
+        <!-- ======================================================================================================= -->
+        <li id="p-collapsible-popoto" class="active">
+            <div class="collapsible-header white-text" style="background-color: #525863; border-bottom: 0;"><i
+                    class="ppt-icon ppt-icon-logo" style="color:#8bb71a;"></i> Graph
+                Query
+            </div>
+            <div class="collapsible-body no-padding" style="border-bottom: 0;">
+                <div id="popoto-graph" class="ppt-div-graph" style="height: 600px;">
+                </div>
+            </div>
+        </li>
+        <!-- ======================================================================================================= -->
+        <!-- QUERY -->
+        <!-- ======================================================================================================= -->
+        <li id="p-collapsible-query" class="active">
+            <div class="collapsible-header white-text" style="background-color: #525863;border-bottom: 0;"><i
+                    class="ppt-icon ppt-icon-wrench" style="color:#8bb71a;"></i>Query
+            </div>
+            <div class="collapsible-body no-padding" style="border-bottom: 0;">
+                <div id="popoto-cypher" class="ppt-container-cypher center-align">
+                </div>
+            </div>
+        </li>
+        <!-- ======================================================================================================= -->
+        <!-- RESULTS -->
+        <!-- ======================================================================================================= -->
+        <li id="p-collapsible-results" class="active">
+            <div class="collapsible-header white-text" style="background-color: #525863;border-bottom: 0;"><i
+                    class="ppt-icon ppt-icon-user-circle-o" style="color:#8bb71a;"></i>Results&nbsp;
+                <span class="" id="result-total-count">0</span>
+            </div>
+            <div class="collapsible-body no-padding" style="border-bottom: 0;">
+                <div id='map' style='width: 100%; height: 800px;'></div>
+                <!--<div class="row">-->
+                <!--<div id="popoto-results" class="col s12 cards-container">-->
+
+                <!--</div>-->
+                <!--</div>-->
+            </div>
+        </li>
+    </ul>
+
+</div>
+
+<script src='https://api.mapbox.com/mapbox-gl-js/v0.44.1/mapbox-gl.js'></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js" charset="utf-8"></script>
+<script src="https://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+<script src="https://popotojs.com/release/1.2.rc2/js/popoto.min.js" charset="utf-8"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-alpha.3/js/materialize.min.js"></script>
+<script src="js/auto-complete.min.js"></script>
+<script src="js/autocomplete.js"></script>
+
+<script>
+    popoto.rest.CYPHER_URL = "https://db-kh9ct9ai1mqn6hz2itry.graphenedb.com:24780/db/data/transaction/commit";
+    popoto.rest.AUTHORIZATION = "Basic cG9wb3RvOmIuVlJZQVF2blZjV2tyLlRaYnpmTks5aHp6SHlTdXk=";
+
+    popoto.graph.WHEEL_ZOOM_ENABLED = false;
+
+    popoto.provider.node.Provider = {
+        "Social": {
+            children: ["Bar", "Food and Dining"],
+            returnAttributes: ["name", "id", "address", "postcode", "po_box", "locality", "address_extended", "tel", "fax", "website", "email", "latitude", "longitude"],
+            constraintAttribute: "id"
+        },
+        "Landmark": {
+            returnAttributes: ["name", "id", "address", "postcode", "po_box", "locality", "address_extended", "tel", "fax", "website", "email", "latitude", "longitude"],
+            constraintAttribute: "id"
+        },
+        "Bar": {
+            parent: "Social",
+            children: ["Sport", "Hotel Lounge", "Wine"],
+
+        },
+        "Food and Dining": {
+            parent: "Social",
+            children: ["Bagel and Donut", "Bakery", "Cafe, Coffee and Tea House", "Dessert", "Ice Cream Parlor", "Juice Bar and Smoothie", "Restaurant"],
+
+        },
+        "Restaurant": {
+            parent: "Food and Dining",
+            children: ["American", "Barbecue", "Burger", "Chinese", "Deli", "Diner", "Fast Food", "French", "Indian", "Italian", "Japanese", "Korean", "Mexican", "Middle Eastern", "Pizza", "Seafood", "Steakhouse", "Sushi", "Thai", "Vegan and Vegetarian", "Asian", "Food Truck"],
+
+        },
+        "Neighborhood": {
+            returnAttributes: ["name", "id"],
+            constraintAttribute: "id"
+        },
+        "Locality": {
+            returnAttributes: ["name"],
+            constraintAttribute: "name"
+        },
+        "Region": {
+            returnAttributes: ["code"],
+            constraintAttribute: "code"
+        },
+        "PriceCategory": {
+            returnAttributes: ["value"],
+            constraintAttribute: "value"
+        },
+        "Rating": {
+            returnAttributes: ["value"],
+            constraintAttribute: "value"
+        },
+        "Year": {
+            returnAttributes: ["value"],
+            constraintAttribute: "value"
+        },
+        "Country": {
+            returnAttributes: ["code"],
+            constraintAttribute: "code"
+        },
+        "Owner": {
+            returnAttributes: ["name"],
+            constraintAttribute: "name"
+        }
+    };
+
+    popoto.provider.link.Provider = {
+
+        // Customize the text displayed on links:
+        "getTextValue": function (link) {
+            if (link.type === popoto.graph.link.LinkTypes.RELATION || link.type === popoto.graph.link.LinkTypes.SEGMENT) {
+
+                var targetName = "";
+                if (link.type === popoto.graph.link.LinkTypes.SEGMENT) {
+                    targetName = " " + popoto.provider.node.getTextValue(link.target);
+                }
+
+                switch (link.label) {
+                    case "ACTED_IN":
+                        return "Acted in" + targetName;
+                    case "DIRECTED":
+                        return "Directed" + targetName;
+                    case "PRODUCED":
+                        return "Produced" + targetName;
+                    case "WROTE":
+                        return "Wrote" + targetName;
+                    case "FOLLOWS":
+                        return "Follows" + targetName;
+                    case "REVIEWED":
+                        return "Reviewed" + targetName;
+                    default :
+                        return link.label + targetName;
+                }
+            } else {
+                return "";
+            }
+        }
+
+    };
+    popoto.result.onTotalResultCount(function (count) {
+        document.getElementById("result-total-count").innerHTML = "(" + count + ")";
+    });
+
+
+    function initCollapsible() {
+
+        var element = document.querySelector('#collapsible-components');
+        var collapsible = new M.Collapsible(element,
+            {
+                accordion: false,
+                onOpenEnd: function (el) {
+                    var id = el.id;
+                    if (id === "p-collapsible-popoto") {
+                        if (popoto.graph.getRootNode() !== undefined) {
+                            popoto.graph.getRootNode().px = $('#p-collapsible-popoto').width() / 2;
+                            popoto.graph.getRootNode().py = 300;
+                            popoto.updateGraph();
+                        }
+                    }
+                },
+                onCloseEnd: function (el) {
+                }
+            });
+    }
+
+    initCollapsible();
+
+    popoto.start("Social");
+    mapboxgl.accessToken = 'pk.eyJ1IjoicG90YXRvdGFydSIsImEiOiJjamU3NXM1bTUwOGRqMnBvNWkzdjByNWV0In0.2NMoyG2zRd8X8BMQht_gAg';
+
+    var map = new mapboxgl.Map({
+        container: 'map',
+        style: 'mapbox://styles/mapbox/streets-v10',
+        center: [-74.0066, 40.7135],
+        zoom: 15.5,
+        pitch: 45,
+        bearing: -17.6,
+        hash: true
+    });
+
+    map.scrollZoom.disable();
+    // Add zoom and rotation controls to the map.
+    map.addControl(new mapboxgl.NavigationControl());
+
+    // The 'building' layer in the mapbox-streets vector source contains building-height
+    // data from OpenStreetMap.
+    map.on('load', function() {
+        // Insert the layer beneath any symbol layer.
+        var layers = map.getStyle().layers;
+
+        var labelLayerId;
+        for (var i = 0; i < layers.length; i++) {
+            if (layers[i].type === 'symbol' && layers[i].layout['text-field']) {
+                labelLayerId = layers[i].id;
+                break;
+            }
+        }
+
+        map.addLayer({
+            'id': '3d-buildings',
+            'source': 'composite',
+            'source-layer': 'building',
+            'filter': ['==', 'extrude', 'true'],
+            'type': 'fill-extrusion',
+            'minzoom': 15,
+            'paint': {
+                'fill-extrusion-color': '#aaa',
+
+                // use an 'interpolate' expression to add a smooth transition effect to the
+                // buildings as the user zooms in
+                'fill-extrusion-height': [
+                    "interpolate", ["linear"], ["zoom"],
+                    15, 0,
+                    15.05, ["get", "height"]
+                ],
+                'fill-extrusion-base': [
+                    "interpolate", ["linear"], ["zoom"],
+                    15, 0,
+                    15.05, ["get", "min_height"]
+                ],
+                'fill-extrusion-opacity': .6
+            }
+        }, labelLayerId);
+    });
+
+    /**
+     * Add a listener on result received to update map.
+     */
+    popoto.result.onResultReceived(
+        function (resultObjects) {
+            map.fitBounds([[
+                32.958984,
+                -5.353521
+            ], [
+                43.50585,
+                5.615985
+            ]]);
+
+            // var geojson = createGeojson(resultObjects);
+            // layer.setGeoJSON(geojson);
+            //
+            // if (layer.getBounds().isValid()) {
+            //     map.fitBounds(layer.getBounds().pad(0.1));
+            // }
+            //
+            // var index = 0;
+            // layer.eachLayer(function (aLayer) {
+            //     resultObjects[index].mapLayer = aLayer;
+            //     index++;
+            // });
+        }
+    );
+
+</script>
 </body>
 </html>
