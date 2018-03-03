@@ -28,6 +28,74 @@
             width: 100%;
             height: 100%;
         }
+
+        .marker {
+            border: none;
+            cursor: pointer;
+            height: 56px;
+            width: 56px;
+            background-image: url(image/node/social/marker.png);
+            background-color: rgba(0, 0, 0, 0);
+        }
+
+        .result-title {
+            cursor: pointer;
+            color: #039be5;
+        }
+
+        .map {
+            width: 100%;
+            height: 100vh;
+        }
+
+        /* Marker tweaks */
+        .mapboxgl-popup-close-button {
+            display: none;
+        }
+
+        .mapboxgl-popup-content {
+            font: 400 15px/22px 'Source Sans Pro', 'Helvetica Neue', Sans-serif;
+            padding: 0;
+            width: 180px;
+        }
+
+        .mapboxgl-popup-content-wrapper {
+            padding: 1%;
+        }
+
+        .mapboxgl-popup-content h3 {
+            background: #91c949;
+            color: #fff;
+            margin: 0;
+            display: block;
+            padding: 10px;
+            border-radius: 3px 3px 0 0;
+            font-weight: 700;
+            margin-top: -15px;
+        }
+
+        .mapboxgl-popup-content h4 {
+            margin: 0;
+            display: block;
+            padding: 10px;
+            font-weight: 400;
+        }
+
+        .mapboxgl-popup-content div {
+            padding: 10px;
+        }
+
+        .mapboxgl-container .leaflet-marker-icon {
+            cursor: pointer;
+        }
+
+        .mapboxgl-popup-anchor-top > .mapboxgl-popup-content {
+            margin-top: 15px;
+        }
+
+        .mapboxgl-popup-anchor-top > .mapboxgl-popup-tip {
+            border-bottom-color: #91c949;
+        }
     </style>
 </head>
 <body style="background-color: #2e3138;">
@@ -83,29 +151,36 @@
                 <span class="" id="result-total-count">0</span>
             </div>
             <div class="collapsible-body no-padding" style="border-bottom: 0;">
-                <div id='map' style='width: 100%; height: 800px;'></div>
-                <!--<div class="row">-->
-                <!--<div id="popoto-results" class="col s12 cards-container">-->
+                <div class="row">
+                    <div id="popoto-results" class="col s3 cards-container">
 
-                <!--</div>-->
-                <!--</div>-->
+                    </div>
+                    <div id='map' class="map col s9"></div>
+                </div>
             </div>
         </li>
     </ul>
 
 </div>
 
+<footer>
+    <a href="https://www.mapbox.com/help/building-a-store-locator/">https://www.mapbox.com/help/building-a-store-locator/</a>
+</footer>
+
 <script src='https://api.mapbox.com/mapbox-gl-js/v0.44.1/mapbox-gl.js'></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js" charset="utf-8"></script>
 <script src="https://d3js.org/d3.v3.min.js" charset="utf-8"></script>
 <script src="https://popotojs.com/release/1.2.rc2/js/popoto.min.js" charset="utf-8"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-alpha.3/js/materialize.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-alpha.4/js/materialize.min.js"></script>
 <script src="js/auto-complete.min.js"></script>
 <script src="js/autocomplete.js"></script>
-
+<script src="js/map.js"></script>
 <script>
     popoto.rest.CYPHER_URL = "https://db-kh9ct9ai1mqn6hz2itry.graphenedb.com:24780/db/data/transaction/commit";
     popoto.rest.AUTHORIZATION = "Basic cG9wb3RvOmIuVlJZQVF2blZjV2tyLlRaYnpmTks5aHp6SHlTdXk=";
+
+    popoto.result.RESULTS_PAGE_SIZE = 2000;
+    popoto.query.MAX_RESULTS_COUNT = 2000;
 
     popoto.graph.WHEEL_ZOOM_ENABLED = false;
 
@@ -113,7 +188,20 @@
         "Social": {
             children: ["Bar", "Food and Dining"],
             returnAttributes: ["name", "id", "address", "postcode", "po_box", "locality", "address_extended", "tel", "fax", "website", "email", "latitude", "longitude"],
-            constraintAttribute: "id"
+            constraintAttribute: "id",
+            "displayResults": function (resultElement) {
+
+                resultElement
+                    .append("span")
+                    .attr("class", "result-title")
+                    .text(function (d) {
+                        return d.attributes.name;
+                    })
+                    .on("click", function (r) {
+                        flyToResult(r)
+                    });
+
+            }
         },
         "Landmark": {
             returnAttributes: ["name", "id", "address", "postcode", "po_box", "locality", "address_extended", "tel", "fax", "website", "email", "latitude", "longitude"],
@@ -229,7 +317,6 @@
 
     initCollapsible();
 
-    popoto.start("Social");
     mapboxgl.accessToken = 'pk.eyJ1IjoicG90YXRvdGFydSIsImEiOiJjamU3NXM1bTUwOGRqMnBvNWkzdjByNWV0In0.2NMoyG2zRd8X8BMQht_gAg';
 
     var map = new mapboxgl.Map({
@@ -242,13 +329,13 @@
         hash: true
     });
 
-    map.scrollZoom.disable();
+    // map.scrollZoom.disable();
     // Add zoom and rotation controls to the map.
     map.addControl(new mapboxgl.NavigationControl());
 
     // The 'building' layer in the mapbox-streets vector source contains building-height
     // data from OpenStreetMap.
-    map.on('load', function() {
+    map.on('load', function () {
         // Insert the layer beneath any symbol layer.
         var layers = map.getStyle().layers;
 
@@ -285,6 +372,15 @@
                 'fill-extrusion-opacity': .6
             }
         }, labelLayerId);
+
+        map.addSource('results', {
+            type: 'geojson', data: {
+                "type": "FeatureCollection",
+                "features": []
+            }
+        });
+
+        popoto.start("Social");
     });
 
     /**
@@ -292,28 +388,96 @@
      */
     popoto.result.onResultReceived(
         function (resultObjects) {
-            map.fitBounds([[
-                32.958984,
-                -5.353521
-            ], [
-                43.50585,
-                5.615985
-            ]]);
 
-            // var geojson = createGeojson(resultObjects);
-            // layer.setGeoJSON(geojson);
-            //
-            // if (layer.getBounds().isValid()) {
-            //     map.fitBounds(layer.getBounds().pad(0.1));
-            // }
-            //
-            // var index = 0;
-            // layer.eachLayer(function (aLayer) {
-            //     resultObjects[index].mapLayer = aLayer;
-            //     index++;
-            // });
+
+            var geojson = createGeojson(resultObjects);
+            map.getSource('results').setData(geojson);
+
+
+            d3.selectAll(".marker").remove();
+
+            // This is where your interactions with the symbol layer used to be
+            // Now you have interactions with DOM markers instead
+            geojson.features.forEach(function (marker, i) {
+                // todo use d3
+
+                // Create an img element for the marker
+                var el = document.createElement('div');
+                el.id = "marker-" + i;
+                el.className = 'marker';
+                // Add markers to the map at all points
+                new mapboxgl.Marker(el, {offset: [0, -23]})
+                    .setLngLat(marker.geometry.coordinates)
+                    .addTo(map);
+
+                el.addEventListener('click', function (e) {
+                    // 1. Fly to the point
+                    flyToStore(marker);
+
+                    // 2. Close all other popups and display popup for clicked store
+                    createPopUp(marker);
+
+                    // // 3. Highlight listing in sidebar (and remove highlight for all other listings)
+                    // var activeItem = document.getElementsByClassName('active');
+
+                    // e.stopPropagation();
+                    // if (activeItem[0]) {
+                    //     activeItem[0].classList.remove('active');
+                    // }
+                    //
+                    // var listing = document.getElementById('listing-' + i);
+                    // listing.classList.add('active');
+
+                });
+            });
+
+            map.fitBounds(computeBounds(geojson), {
+                padding: 20
+            });
         }
     );
+
+    /**
+     * Create a Geojson object usable by mapbox from the result list.
+     *
+     * @param resultObjects
+     * @returns {{type: string, features: Array}}
+     */
+    function createGeojson(resultObjects) {
+        var features = [];
+
+        for (var i = 0; i < resultObjects.length; i++) {
+            var longitude = Number(resultObjects[i].attributes.longitude);
+            var latitude = Number(resultObjects[i].attributes.latitude);
+
+            if (longitude && latitude) {
+                features.push({
+                    "resultObject": resultObjects[i],
+                    "type": "Feature",
+                    properties: {
+                        "name": resultObjects[i].attributes.name,
+                        "address": resultObjects[i].attributes.address,
+                        "postcode": resultObjects[i].attributes.postcode,
+                        "locality": resultObjects[i].attributes.locality,
+                        "tel": resultObjects[i].attributes.tel
+                    },
+                    "geometry": {
+                        "type": "Point",
+                        "coordinates": [
+                            longitude,
+                            latitude
+                        ]
+                    }
+                })
+            }
+        }
+
+        return {
+            "type": "FeatureCollection",
+            "features": features
+        };
+    }
+
 
 </script>
 </body>
