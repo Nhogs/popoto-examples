@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis/4.21.0/vis.min.css">
+    <style type="text/css">
+        body {
+            font: 10pt arial;
+        }
+
+        #mynetwork {
+            width: 100%;
+            height: 800px;
+            border: 1px solid lightgray;
+            background-color: #333333;
+        }
+    </style>
+</head>
+<body>
+
+<div id="mynetwork"></div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js" charset="utf-8"></script>
+<script src="https://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/vis/4.21.0/vis.min.js" charset="utf-8"></script>
+<script src="https://popotojs.com/release/1.2.rc4/js/popoto.min.js" charset="utf-8"></script>
+<script>
+    // popoto.logger.LEVEL = popoto.logger.LogLevels.INFO;
+
+    popoto.rest.CYPHER_URL = "https://hobby-pbjiefemnffigbkeelplibal.dbs.graphenedb.com:24780/db/data/transaction/commit";
+    popoto.rest.AUTHORIZATION = "Basic YXBpOmIudGR6V2xjeWhPbWk3LmhDdEtkcnF0a080Zk1adWU=";
+
+    popoto.rest.post(
+        {
+            "statements": [
+                {
+                    "statement": "MATCH p=()-[r:INDIRECT_STEM]->() RETURN p",
+                    "parameters": {},
+                    "resultDataContents": ["graph"]
+                }
+            ]
+        })
+        .done(function (response) {
+
+            // Parse results and convert it to vis.js compatible data.
+            var graphData = parseGraphResultData(response);
+            var nodes = convertNodes(graphData.nodes);
+            var edges = convertEdges(graphData.edges);
+            var visData = {
+                nodes: nodes,
+                edges: edges
+            };
+
+            // create a network
+            var container = document.getElementById('mynetwork');
+
+            var options = {
+                nodes: {
+                    borderWidth:4,
+                    size:30,
+                    color: {
+                        border: '#222222',
+                        background: '#666666'
+                    },
+                    font:{color:'#eeeeee'}
+                },
+                edges: {
+                    color: 'lightgray'
+                }
+            };
+            network = new vis.Network(container, visData, options);
+
+
+        })
+        .fail(function (xhr, textStatus, errorThrown) {
+            console.error(xhr, textStatus, errorThrown);
+        });
+
+
+    function parseGraphResultData(data) {
+        var nodes = {}, edges = {};
+        data.results[0].data.forEach(function (row) {
+            row.graph.nodes.forEach(function (n) {
+                if (!nodes.hasOwnProperty(n.id)) {
+                    nodes[n.id] = n;
+                }
+            });
+            row.graph.relationships.forEach(function (r) {
+                if (!edges.hasOwnProperty(r.id)) {
+                    edges[r.id] = r;
+                }
+            });
+        });
+        var nodesArray = [], edgesArray = [];
+        for (var p in nodes) {
+            if (nodes.hasOwnProperty(p)) {
+                nodesArray.push(nodes[p]);
+            }
+        }
+        for (var q in edges) {
+            if (edges.hasOwnProperty(q)) {
+                edgesArray.push(edges[q])
+            }
+        }
+        return {nodes: nodesArray, edges: edgesArray};
+    }
+
+
+    function convertNodes(nodes) {
+        var convertedNodes = [];
+        nodes.forEach(function (node) {
+            var nodeLabel = node.labels[0];
+            var displayedLabel = nodeLabel + ("\n" + node.properties["name"]).substr(0, 20);
+            convertedNodes.push({
+                id: node.id,
+                label: displayedLabel,
+                group: nodeLabel,
+                shape: 'circularImage',
+                image: node.properties.profile_image_url
+            })
+        });
+        return convertedNodes;
+    }
+    function convertEdges(edges) {
+        var convertedEdges = [];
+        edges.forEach(function (edge) {
+            convertedEdges.push({
+                from: edge.startNode,
+                to: edge.endNode,
+                // label: edge.type
+            })
+        });
+        return convertedEdges;
+    }
+
+</script>
+</body>
+</html>
