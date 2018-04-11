@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Popoto Search</title>
+
+    <!-- Add Popoto default CSS styles -->
+    <link rel="stylesheet" href="https://unpkg.com/popotojs/dist/popoto.min.css">
+    <style>
+        #popoto-graph:fullscreen {
+            width: 100%;
+            height: 100%;
+        }
+
+        #popoto-graph:-webkit-full-screen {
+            width: 100%;
+            height: 100%;
+        }
+
+        #popoto-graph:-moz-full-screen {
+            width: 100%;
+            height: 100%;
+        }
+
+        #popoto-graph:-ms-fullscreen {
+            width: 100%;
+            height: 100%;
+        }
+
+        .ppt-div-graph{
+            height: 50%;
+        }
+    </style>
+</head>
+<body class="ppt-body">
+
+<section class="ppt-section-main" style="height: 800px">
+    <div class="ppt-section-header">
+        <span class="ppt-header-span">Neo4j movie graph -</span> Cypher viewer example
+    </div>
+
+    <!-- By default the graph is generated on the HTML element with ID "popoto-graph"
+     If needed this id can be modified with property "popoto.graph.containerId" -->
+
+    <div id="popoto-graph" class="ppt-div-graph">
+        <!-- Graph is generated here -->
+    </div>
+
+    <!-- By default the cypher viewer is generated on the HTML element with ID "popoto-cypher"
+     If needed this id can be modified with property "popoto.cypherviewer.containerId" -->
+
+    <div id="popoto-cypher" class="ppt-container-cypher">
+        <!-- Cypher query viewer will be generated here -->
+    </div>
+
+</section>
+
+<!-- Required scripts -->
+<script src="https://unpkg.com/jquery" charset="utf-8"></script>
+<script src="https://unpkg.com/d3" charset="utf-8"></script>
+<script src="https://unpkg.com/popotojs" charset="utf-8"></script>
+<script>
+
+    // Demo Neo4j database settings hosted on GrapheneDb
+    popoto.rest.CYPHER_URL = "https://db-kh9ct9ai1mqn6hz2itry.graphenedb.com:24780/db/data/transaction/commit";
+    popoto.rest.AUTHORIZATION = "Basic cG9wb3RvOmIuVlJZQVF2blZjV2tyLlRaYnpmTks5aHp6SHlTdXk=";
+
+    // Define the list of label provider to customize the graph behavior:
+    // Only two labels are used in Neo4j movie graph example: "Movie" and "Person"
+    popoto.provider.node.Provider = {
+        "Movie": {
+            "returnAttributes": ["title", "released", "tagline"],
+            "constraintAttribute": "title"
+        },
+        "Person": {
+            "returnAttributes": ["name", "born"],
+            "constraintAttribute": "name"
+        }
+    };
+
+    // Start the generation using parameter as root label of the query.
+    popoto.start("Person");
+
+</script>
+</body>
+</html>
