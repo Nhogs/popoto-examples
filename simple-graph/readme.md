@@ -1,4 +1,4 @@
-#simple-graph
+# simple-graph
 
 Simplest example of [Popoto.js](http://popotojs.com/) displaying only a graph.
 
