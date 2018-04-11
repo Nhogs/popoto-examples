@@ -13,6 +13,9 @@ Contains a list of Popoto.js examples
 ### Factual
 [![factual](https://nhogs.github.io/popoto-examples/factual/screen/main.png "Main screenshot")](https://nhogs.github.io/popoto-examples/factual/index.html)
 
+### Marker
+[![Main screenshot](https://nhogs.github.io/popoto-examples/marker/screen/main.png "Main screenshot")](https://nhogs.github.io/popoto-examples/marker/index.html)
+
 ### Northwind
 [![northwind](https://nhogs.github.io/popoto-examples/northwind/screen/main.png "Main screenshot")](https://nhogs.github.io/popoto-examples/northwind/index.html)
 
