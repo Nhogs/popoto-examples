@@ -2,6 +2,8 @@
   "name": "popoto-examples",
   "version": "0.0.1",
   "dependencies": {
-    
+    "popotojs": "latest",
+    "jquery": "latest",
+    "d3": "latest"
   }
 }

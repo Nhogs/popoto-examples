@@ -1,3 +1,13 @@
 language: node_js
 node_js:
-  - "8"
+  - "stable"
+deploy:
+ - provider: pages
+   skip_cleanup: true
+   github_token: $GITHUB_TOKEN
+   email: "contact@popotojs.com"
+   local_dir: ./gh-pages
+   target_branch: gh-pages
+ - provider: npm
+   email: "contact@popotojs.com"
+   api_key: $NPM_TOKEN
