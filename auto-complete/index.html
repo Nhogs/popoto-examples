@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Auto Complete</title>
-    <link rel="stylesheet" href="https://popotojs.com/release/1.2.rc2/css/popoto.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/popotojs/dist/popoto.min.css">
     <link rel="stylesheet"
           href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-alpha.3/css/materialize.min.css">
     <link rel="stylesheet" href="css/auto-complete.css">
@@ -93,14 +93,15 @@
 
 </div>
 
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js" charset="utf-8"></script>
-<script src="https://d3js.org/d3.v3.min.js" charset="utf-8"></script>
-<script src="https://popotojs.com/release/1.2.rc2/js/popoto.min.js" charset="utf-8"></script>
+<script src="https://unpkg.com/jquery" charset="utf-8"></script>
+<script src="https://unpkg.com/d3" charset="utf-8"></script>
+<script src="https://unpkg.com/popotojs" charset="utf-8"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-alpha.3/js/materialize.min.js"></script>
 <script src="js/auto-complete.min.js"></script>
 <script src="js/main.js"></script>
 
 <script>
+    // Demo Neo4j database settings hosted on GrapheneDb
     popoto.rest.CYPHER_URL = "https://db-kh9ct9ai1mqn6hz2itry.graphenedb.com:24780/db/data/transaction/commit";
     popoto.rest.AUTHORIZATION = "Basic cG9wb3RvOmIuVlJZQVF2blZjV2tyLlRaYnpmTks5aHp6SHlTdXk=";
 
