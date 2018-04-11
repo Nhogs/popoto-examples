@@ -119,8 +119,8 @@
     var minAmount = 3044;
 
     // Generate size and CSS classes scales based on data using d3.
-    var sizeScale = d3.scale.quantize().domain([minAmount, maxAmount]).range([50, 75, 100, 125, 150]);
-    var strokeCSSScale = d3.scale.quantize().domain([minAmount, maxAmount]).range(["very-thin", "thin", "medium", "thick", "very-thick"]);
+    var sizeScale = d3.scaleQuantize().domain([minAmount, maxAmount]).range([50, 75, 100, 125, 150]);
+    var strokeCSSScale = d3.scaleQuantize().domain([minAmount, maxAmount]).range(["very-thin", "thin", "medium", "thick", "very-thick"]);
 
     // Popoto nodes provider configuration
     popoto.provider.node.Provider = {
