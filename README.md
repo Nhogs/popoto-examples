@@ -19,5 +19,8 @@ Contains a list of Popoto.js examples
 ### Northwind
 [![northwind](https://nhogs.github.io/popoto-examples/northwind/screen/main.png "Main screenshot")](https://nhogs.github.io/popoto-examples/northwind/index.html)
 
+### Query-viewer
+[![Main screenshot](https://nhogs.github.io/popoto-examples/query-viewer/screen/main.png "Main screenshot")](https://nhogs.github.io/popoto-examples/query-viewer/index.html)
+
 ### Simple-graph
 [![simple-graph](https://nhogs.github.io/popoto-examples/simple-graph/screen/main.png "Main screenshot")](https://nhogs.github.io/popoto-examples/simple-graph/index.html)
