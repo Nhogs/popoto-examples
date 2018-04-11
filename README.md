@@ -4,6 +4,9 @@ Contains a list of Popoto.js examples
 ### Auto-complete
 [![auto-complete](https://nhogs.github.io/popoto-examples/auto-complete/screen/main.png "Main screenshot")](https://nhogs.github.io/popoto-examples/auto-complete/index.html)
 
+### Css-customization
+[![Main screenshot](https://nhogs.github.io/popoto-examples/css-customization/screen/main.png "Main screenshot")](https://nhogs.github.io/popoto-examples/css-customization/index.html)
+
 ### Cypher-viewer
 [![cypher-viewer](https://nhogs.github.io/popoto-examples/cypher-viewer/screen/main.png "Main screenshot")](https://nhogs.github.io/popoto-examples/cypher-viewer/index.html)
 
