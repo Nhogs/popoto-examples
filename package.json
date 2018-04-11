@@ -1,6 +1,10 @@
 {
   "name": "popoto-examples",
   "version": "0.0.1",
+  "scripts": {
+    "build": "mkdir gh-pages && cp -r auto-complete gh-pages",
+    "pretest": "npm run build"
+  },
   "dependencies": {
     "popotojs": "latest",
     "jquery": "latest",
