@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Results</title>
+
+    <!-- Add Popoto default CSS styles -->
+    <link rel="stylesheet" href="https://unpkg.com/popotojs/dist/popoto.min.css">
+    <style>
+        #popoto-graph:fullscreen {
+            width: 100%;
+            height: 100%;
+        }
+
+        #popoto-graph:-webkit-full-screen {
+            width: 100%;
+            height: 100%;
+        }
+
+        #popoto-graph:-moz-full-screen {
+            width: 100%;
+            height: 100%;
+        }
+
+        #popoto-graph:-ms-fullscreen {
+            width: 100%;
+            height: 100%;
+        }
+
+        .ppt-div-graph{
+            height: 50%;
+        }
+    </style>
+</head>
+<body class="ppt-body">
+
+<section class="ppt-section-main" style="height: 700px">
+    <div class="ppt-section-header">
+        <span class="ppt-header-span">Neo4j movie graph -</span> Results example
+    </div>
+
+    <div id="popoto-graph" class="ppt-div-graph">
+        <!-- Graph is generated here-->
+    </div>
+
+    <div id="popoto-cypher" class="ppt-container-query">
+        <!-- Query viewer is generated here -->
+    </div>
+
+    <!-- Add a header with total number of results count -->
+    <div class="ppt-section-header">
+        RESULTS <span id="rescount" class="ppt-count"></span>
+    </div>
+
+    <div id="popoto-results" class="ppt-container-results">
+        <!-- Results are generated here -->
+    </div>
+
+</section>
+
+<!-- Required scripts -->
+<script src="https://unpkg.com/jquery" charset="utf-8"></script>
+<script src="https://unpkg.com/d3" charset="utf-8"></script>
+<script src="https://unpkg.com/popotojs" charset="utf-8"></script>
+<script>
+
+    // Demo Neo4j database settings hosted on GrapheneDb
+    popoto.rest.CYPHER_URL = "https://db-kh9ct9ai1mqn6hz2itry.graphenedb.com:24780/db/data/transaction/commit";
+    popoto.rest.AUTHORIZATION = "Basic cG9wb3RvOmIuVlJZQVF2blZjV2tyLlRaYnpmTks5aHp6SHlTdXk=";
+
+    // Define the list of label provider to customize the graph behavior:
+    // Only two labels are used in Neo4j movie graph example: "Movie" and "Person"
+    popoto.provider.node.Provider = {
+        "Movie": {
+            "returnAttributes": ["title", "released", "tagline"],
+            "constraintAttribute": "title"
+        },
+        "Person": {
+            "returnAttributes": ["name", "born"],
+            "constraintAttribute": "name",
+            // Customize result display for Person nodes:
+            "displayResults": function (pResultElmt) {
+
+                // Here D3.js mechanisms is used to generate HTML code.
+                // By default Popoto.js generates a <p> element for each result.
+                // pResultElmt parameter is the <p> element selected with D3.js
+                // So for "Person" result nodes two elements are generated:
+
+                // An <h3> element containing the person name
+                pResultElmt.append("h3")
+                    .text(function (result) {
+                        return result.attributes.name;
+                    });
+
+                // A <span> element with the computed age from born attribute
+                pResultElmt.filter(function (result) {
+                    // Filter on attribute having born attribute value
+                    return result.attributes.born;
+                }).append("span").text(function (result) {
+                    return "Age: " + (new Date().getFullYear() - result.attributes.born);
+                });
+
+            }
+        }
+    };
+
+    // Change the number of displayed results:
+    popoto.result.RESULTS_PAGE_SIZE = 20;
+
+    // Add a listener on returned result count to update count in page
+    popoto.result.onTotalResultCount(function (count) {
+        d3.select("#rescount").text(function (d) {
+            return "(" + count + ")";
+        })
+    });
+
+    // Start the generation using parameter as root label of the query.
+    popoto.start("Person");
+
+</script>
+</body>
+</html>

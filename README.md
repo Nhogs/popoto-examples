@@ -22,5 +22,8 @@ Contains a list of Popoto.js examples
 ### Query-viewer
 [![Main screenshot](https://nhogs.github.io/popoto-examples/query-viewer/screen/main.png "Main screenshot")](https://nhogs.github.io/popoto-examples/query-viewer/index.html)
 
+### Results
+[![Main screenshot](https://nhogs.github.io/popoto-examples/results/screen/main.png "Main screenshot")](https://nhogs.github.io/popoto-examples/results/index.html)
+
 ### Simple-graph
 [![simple-graph](https://nhogs.github.io/popoto-examples/simple-graph/screen/main.png "Main screenshot")](https://nhogs.github.io/popoto-examples/simple-graph/index.html)
