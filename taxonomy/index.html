@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html" charset="UTF-8">
+    <title>Taxonomy</title>
+
+    <!-- Add Popoto default CSS styles -->
+    <link rel="stylesheet" href="https://unpkg.com/popotojs/dist/popoto.min.css">
+    <style>
+        #popoto-graph:fullscreen {
+            width: 100%;
+            height: 100%;
+        }
+
+        #popoto-graph:-webkit-full-screen {
+            width: 100%;
+            height: 100%;
+        }
+
+        #popoto-graph:-moz-full-screen {
+            width: 100%;
+            height: 100%;
+        }
+
+        #popoto-graph:-ms-fullscreen {
+            width: 100%;
+            height: 100%;
+        }
+
+    </style>
+</head>
+<body class="ppt-body">
+
+<section class="ppt-section-main" style="height: 800px">
+    <div class="ppt-section-header">
+        <span class="ppt-header-span">Neo4j movie graph -</span> Query viewer example
+    </div>
+    <div class="ppt-container-graph">
+
+        <div id="popoto-taxonomy" class="ppt-taxo-nav">
+
+        </div>
+
+        <div id="popoto-graph" class="ppt-div-graph">
+            <!-- Graph is generated here -->
+        </div>
+    </div>
+
+</section>
+
+<!-- Required scripts -->
+<script src="https://unpkg.com/jquery" charset="utf-8"></script>
+<script src="https://unpkg.com/d3" charset="utf-8"></script>
+<script src="https://unpkg.com/popotojs" charset="utf-8"></script>
+<script>
+
+    // Demo Neo4j database settings hosted on GrapheneDb
+    popoto.rest.CYPHER_URL = "https://db-kh9ct9ai1mqn6hz2itry.graphenedb.com:24780/db/data/transaction/commit";
+    popoto.rest.AUTHORIZATION = "Basic cG9wb3RvOmIuVlJZQVF2blZjV2tyLlRaYnpmTks5aHp6SHlTdXk=";
+
+    // Define the list of label provider to customize the graph behavior:
+    // Only two labels are used in Neo4j movie graph example: "Movie" and "Person"
+    popoto.provider.node.Provider = {
+        "Social": {
+            children: ["Bar", "Food and Dining"],
+            returnAttributes: ["name", "id", "address", "postcode", "po_box", "locality", "address_extended", "tel", "fax", "website", "email", "latitude", "longitude"],
+            constraintAttribute: "id",
+            "displayResults": function (resultElement) {
+
+                resultElement
+                    .append("span")
+                    .attr("class", "result-title")
+                    .text(function (d) {
+                        return d.attributes.name;
+                    })
+                    .on("click", function (r) {
+                        flyToResult(r)
+                    });
+
+            }
+        },
+        "Landmark": {
+            returnAttributes: ["name", "id", "address", "postcode", "po_box", "locality", "address_extended", "tel", "fax", "website", "email", "latitude", "longitude"],
+            constraintAttribute: "id"
+        },
+        "Bar": {
+            parent: "Social",
+            children: ["Sport", "Hotel Lounge", "Wine"],
+
+        },
+        "Food and Dining": {
+            parent: "Social",
+            children: ["Bagel and Donut", "Bakery", "Cafe, Coffee and Tea House", "Dessert", "Ice Cream Parlor", "Juice Bar and Smoothie", "Restaurant"],
+
+        },
+        "Restaurant": {
+            parent: "Food and Dining",
+            children: ["American", "Barbecue", "Burger", "Chinese", "Deli", "Diner", "Fast Food", "French", "Indian", "Italian", "Japanese", "Korean", "Mexican", "Middle Eastern", "Pizza", "Seafood", "Steakhouse", "Sushi", "Thai", "Vegan and Vegetarian", "Asian", "Food Truck"],
+
+        },
+        "Neighborhood": {
+            returnAttributes: ["name", "id"],
+            constraintAttribute: "id"
+        },
+        "Locality": {
+            returnAttributes: ["name"],
+            constraintAttribute: "name"
+        },
+        "Region": {
+            returnAttributes: ["code"],
+            constraintAttribute: "code"
+        },
+        "PriceCategory": {
+            returnAttributes: ["value"],
+            constraintAttribute: "value"
+        },
+        "Rating": {
+            returnAttributes: ["value"],
+            constraintAttribute: "value"
+        },
+        "Year": {
+            returnAttributes: ["value"],
+            constraintAttribute: "value"
+        },
+        "Country": {
+            returnAttributes: ["code"],
+            constraintAttribute: "code"
+        },
+        "Owner": {
+            returnAttributes: ["name"],
+            constraintAttribute: "name"
+        }
+    };
+
+    // Start the generation using parameter as root label of the query.
+    popoto.start("Social");
+
+</script>
+</body>
+</html>

@@ -16,6 +16,9 @@ Contains a list of Popoto.js examples
 ### Marker
 [![Main screenshot](https://nhogs.github.io/popoto-examples/marker/screen/main.png "Main screenshot")](https://nhogs.github.io/popoto-examples/marker/index.html)
 
+### Materialize
+[![Main screenshot](https://nhogs.github.io/popoto-examples/materialize/screen/main.png "Main screenshot")](https://nhogs.github.io/popoto-examples/materialize/index.html)
+
 ### Northwind
 [![northwind](https://nhogs.github.io/popoto-examples/northwind/screen/main.png "Main screenshot")](https://nhogs.github.io/popoto-examples/northwind/index.html)
 
@@ -27,3 +30,9 @@ Contains a list of Popoto.js examples
 
 ### Simple-graph
 [![simple-graph](https://nhogs.github.io/popoto-examples/simple-graph/screen/main.png "Main screenshot")](https://nhogs.github.io/popoto-examples/simple-graph/index.html)
+
+### Taxonomy
+[![Main screenshot](https://nhogs.github.io/popoto-examples/taxonomy/screen/main.png "Main screenshot")](https://nhogs.github.io/popoto-examples/taxonomy/index.html)
+
+### US-regions
+[![Main screenshot](https://nhogs.github.io/popoto-examples/us-regions/screen/main.png "Main screenshot")](https://nhogs.github.io/popoto-examples/us-regions/index.html)
