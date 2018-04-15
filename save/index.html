@@ -61,9 +61,11 @@
                             class="ppt-label" title="Load Graph">All 3 Matrix movies Actors</span></li>
                     <li id="save-2" value="Person"><span class="ppt-icon ppt-save-tag">&nbsp;</span><span
                             class="ppt-label" title="Load Graph">At least one Matrix movie Actors</span></li>
-                    <li id="save-3" value="Movie"><span class="ppt-icon ppt-save-tag">&nbsp;</span><span
-                            class="ppt-label" title="Load Graph">V for Vendetta Producers and Writers</span></li>
+                    <li id="save-3" value="Person"><span class="ppt-icon ppt-save-tag">&nbsp;</span><span
+                            class="ppt-label" title="Load Graph">Only first Matrix movie Actors</span></li>
                     <li id="save-4" value="Movie"><span class="ppt-icon ppt-save-tag">&nbsp;</span><span
+                            class="ppt-label" title="Load Graph">V for Vendetta Producers and Writers</span></li>
+                    <li id="save-5" value="Movie"><span class="ppt-icon ppt-save-tag">&nbsp;</span><span
                             class="ppt-label" title="Load Graph">Paul Blythe Follow Graph</span></li>
                 </ul>
                 <hr>
@@ -235,6 +237,40 @@
             label: "Person",
             rel: [
                 {
+                    label: "ACTED_IN",
+                    target: {
+                        label: "Movie",
+                        value: {
+                            title: "The Matrix"
+                        }
+                    }
+                },
+                {
+                    label: "ACTED_IN",
+                    target: {
+                        label: "Movie",
+                        isNegative:true,
+                        value: {
+                            title: "The Matrix Reloaded"
+                        }
+                    }
+                },
+                {
+                    label: "ACTED_IN",
+                    target: {
+                        label: "Movie",
+                        isNegative:true,
+                        value: {
+                            title: "The Matrix Revolutions"
+                        }
+                    }
+                }
+            ]
+        },
+        "save-4": {
+            label: "Person",
+            rel: [
+                {
                     label: "PRODUCED",
                     target: {
                         label: "Movie",
@@ -254,7 +290,7 @@
                 }
             ]
         },
-        "save-4": {
+        "save-5": {
             label: "Person",
             value: {
                 name: "Paul Blythe"
