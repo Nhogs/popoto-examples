@@ -19,6 +19,9 @@ Contains a list of Popoto.js examples
 ### Materialize
 [![Main screenshot](https://nhogs.github.io/popoto-examples/materialize/screen/main.png "Main screenshot")](https://nhogs.github.io/popoto-examples/materialize/index.html)
 
+### Multiple-selection
+[![Main screenshot](https://nhogs.github.io/popoto-examples/multiple-selection/screen/main.png "Main screenshot")](https://nhogs.github.io/popoto-examples/multiple-selection/index.html)
+
 ### Northwind
 [![northwind](https://nhogs.github.io/popoto-examples/northwind/screen/main.png "Main screenshot")](https://nhogs.github.io/popoto-examples/northwind/index.html)
 
@@ -33,6 +36,9 @@ Contains a list of Popoto.js examples
 
 ### Simple-graph
 [![simple-graph](https://nhogs.github.io/popoto-examples/simple-graph/screen/main.png "Main screenshot")](https://nhogs.github.io/popoto-examples/simple-graph/index.html)
+
+### Start-from-schema
+[![Main screenshot](https://nhogs.github.io/popoto-examples/start-from-schema/screen/main.png "Main screenshot")](https://nhogs.github.io/popoto-examples/start-from-schema/index.html)
 
 ### Taxonomy
 [![Main screenshot](https://nhogs.github.io/popoto-examples/taxonomy/screen/main.png "Main screenshot")](https://nhogs.github.io/popoto-examples/taxonomy/index.html)
