@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html" charset="UTF-8">
+    <title>Fit text</title>
+
+    <!-- Add Popoto default CSS styles -->
+    <link rel="stylesheet" href="https://unpkg.com/popoto/dist/popoto.min.css">
+    <style>
+        #popoto-graph:fullscreen {
+            width: 100%;
+            height: 100%;
+        }
+
+        #popoto-graph:-webkit-full-screen {
+            width: 100%;
+            height: 100%;
+        }
+
+        #popoto-graph:-moz-full-screen {
+            width: 100%;
+            height: 100%;
+        }
+
+        #popoto-graph:-ms-fullscreen {
+            width: 100%;
+            height: 100%;
+        }
+    </style>
+</head>
+<body class="ppt-body">
+
+<section class="ppt-section-main" style="height: 900px">
+    <div class="ppt-section-header">
+        <span class="ppt-header-span">Fit text in nodes</span>
+    </div>
+
+    <!-- By default the graph is generated on the HTML element with ID "popoto-graph"
+     If needed this id can be modified with property "popoto.graph.containerId" -->
+
+    <div id="popoto-graph" class="ppt-div-graph">
+        <!-- Graph is generated here -->
+    </div>
+
+</section>
+
+<!-- Required scripts -->
+<script src="https://unpkg.com/jquery" charset="utf-8"></script>
+<script src="https://unpkg.com/d3" charset="utf-8"></script>
+<script src="https://unpkg.com/popoto" charset="utf-8"></script>
+<script>
+
+    // Demo Neo4j database settings hosted on GrapheneDb
+    popoto.rest.CYPHER_URL = "https://db-kh9ct9ai1mqn6hz2itry.graphenedb.com:24780/db/data/transaction/commit";
+    popoto.rest.AUTHORIZATION = "Basic cG9wb3RvOmIuVlJZQVF2blZjV2tyLlRaYnpmTks5aHp6SHlTdXk=";
+
+    // Activate the option to fit the text inside the nodes
+    popoto.graph.USE_FIT_TEXT = true;
+
+    // Add action in toolbar to toggle the fit text option
+    popoto.tools.TOGGLE_FIT_TEXT = true;
+
+    // Hide All other toolbar options
+    popoto.tools.CENTER_GRAPH = false;
+    popoto.tools.RESET_GRAPH = false;
+    popoto.tools.SAVE_GRAPH = false;
+    popoto.tools.TOGGLE_TAXONOMY = false;
+    popoto.tools.TOGGLE_FULL_SCREEN = false;
+    popoto.tools.TOGGLE_VIEW_RELATION = false;
+
+    // Define the list of label provider to customize the graph behavior:
+    // Only two labels are used in Neo4j movie graph example: "Movie" and "Person"
+    popoto.provider.node.Provider = {
+        "Movie": {
+            "returnAttributes": ["title", "released", "tagline"],
+            "constraintAttribute": "title"
+        },
+        "Person": {
+            "returnAttributes": ["name", "born"],
+            "constraintAttribute": "name"
+        }
+    };
+
+    // Start the generation using parameter as root label of the query.
+    popoto.start("Person");
+
+</script>
+</body>
+</html>
