@@ -4,47 +4,47 @@ Contains a list of Popoto.js examples
 ### [Auto-complete](auto-complete/readme.md)
 [![auto-complete](auto-complete/screen/main.png "Main screenshot")](auto-complete/readme.md)
 
-### Css-customization
-[![css-customization](https://nhogs.github.io/popoto-examples/css-customization/screen/main.png "Main screenshot")](https://nhogs.github.io/popoto-examples/css-customization/index.html)
+### [Css-customization](css-customization/readme.md)
+[![css-customization](css-customization/screen/main.png "Main screenshot")](css-customization/readme.md)
 
-### Cypher-viewer
-[![cypher-viewer](https://nhogs.github.io/popoto-examples/cypher-viewer/screen/main.png "Main screenshot")](https://nhogs.github.io/popoto-examples/cypher-viewer/index.html)
+### [Cypher-viewer](cypher-viewer/readme.md)
+[![cypher-viewer](cypher-viewer/screen/main.png "Main screenshot")](cypher-viewer/readme.md)
 
-### Factual
-[![factual](https://nhogs.github.io/popoto-examples/factual/screen/main.png "Main screenshot")](https://nhogs.github.io/popoto-examples/factual/index.html)
+### [Factual](factual/readme.md)
+[![factual](factual/screen/main.png "Main screenshot")](factual/readme.md)
 
-### Fit-text
-[![fit-text](https://nhogs.github.io/popoto-examples/fit-text/screen/main.png "Main screenshot")](https://nhogs.github.io/popoto-examples/fit-text/index.html)
+### [Fit-text](fit-text/readme.md)
+[![fit-text](fit-text/screen/main.png "Main screenshot")](fit-text/readme.md)
 
-### Marker
-[![marker](https://nhogs.github.io/popoto-examples/marker/screen/main.png "Main screenshot")](https://nhogs.github.io/popoto-examples/marker/index.html)
+### [Marker](marker/readme.md)
+[![marker](marker/screen/main.png "Main screenshot")](marker/readme.md)
 
-### Materialize
-[![materialize](https://nhogs.github.io/popoto-examples/materialize/screen/main.png "Main screenshot")](https://nhogs.github.io/popoto-examples/materialize/index.html)
+### [Materialize](materialize/readme.md)
+[![materialize](materialize/screen/main.png "Main screenshot")](materialize/readme.md)
 
-### Multiple-selection
-[![multiple-selection](https://nhogs.github.io/popoto-examples/multiple-selection/screen/main.png "Main screenshot")](https://nhogs.github.io/popoto-examples/multiple-selection/index.html)
+### [Multiple-selection](multiple-selection/readme.md)
+[![multiple-selection](multiple-selection/screen/main.png "Main screenshot")](multiple-selection/readme.md)
 
-### Northwind
-[![northwind](https://nhogs.github.io/popoto-examples/northwind/screen/main.png "Main screenshot")](https://nhogs.github.io/popoto-examples/northwind/index.html)
+### [Northwind](northwind/readme.md)
+[![northwind](northwind/screen/main.png "Main screenshot")](northwind/readme.md)
 
-### Query-viewer
-[![query-viewer](https://nhogs.github.io/popoto-examples/query-viewer/screen/main.png "Main screenshot")](https://nhogs.github.io/popoto-examples/query-viewer/index.html)
+### [Query-viewer](query-viewer/readme.md)
+[![query-viewer](query-viewer/screen/main.png "Main screenshot")](query-viewer/readme.md)
 
-### Results
-[![results](https://nhogs.github.io/popoto-examples/results/screen/main.png "Main screenshot")](https://nhogs.github.io/popoto-examples/results/index.html)
+### [Results](results/readme.md)
+[![results](results/screen/main.png "Main screenshot")](results/readme.md)
 
-### Save
-[![save](https://nhogs.github.io/popoto-examples/save/screen/main.png "Main screenshot")](https://nhogs.github.io/popoto-examples/save/index.html)
+### [Save](save/readme.md)
+[![save](save/screen/main.png "Main screenshot")](save/readme.md)
 
-### Simple-graph
-[![simple-graph](https://nhogs.github.io/popoto-examples/simple-graph/screen/main.png "Main screenshot")](https://nhogs.github.io/popoto-examples/simple-graph/index.html)
+### [Simple-graph](simple-graph/readme.md)
+[![simple-graph](simple-graph/screen/main.png "Main screenshot")](simple-graph/readme.md)
 
-### Start-from-schema
-[![start-from-schema](https://nhogs.github.io/popoto-examples/start-from-schema/screen/main.png "Main screenshot")](https://nhogs.github.io/popoto-examples/start-from-schema/index.html)
+### [Start-from-schema](start-from-schema/readme.md)
+[![start-from-schema](start-from-schema/screen/main.png "Main screenshot")](start-from-schema/readme.md)
 
-### Taxonomy
-[![taxonomy](https://nhogs.github.io/popoto-examples/taxonomy/screen/main.png "Main screenshot")](https://nhogs.github.io/popoto-examples/taxonomy/index.html)
+### [Taxonomy](taxonomy/readme.md)
+[![taxonomy](taxonomy/screen/main.png "Main screenshot")](taxonomy/readme.md)
 
-### US-regions
-[![us-regions](https://nhogs.github.io/popoto-examples/us-regions/screen/main.png "Main screenshot")](https://nhogs.github.io/popoto-examples/us-regions/index.html)
+### [US-regions](us-regions/readme.md)
+[![us-regions](us-regions/screen/main.png "Main screenshot")](us-regions/readme.md)
