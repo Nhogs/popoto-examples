@@ -1,4 +1,4 @@
-# popoto-examples
+# Popoto-examples
 Contains a list of Popoto.js examples
 
 ## [Auto-complete](auto-complete/readme.md)
@@ -30,6 +30,9 @@ Contains a list of Popoto.js examples
 
 ## [Query-viewer](query-viewer/readme.md)
 [![query-viewer](query-viewer/screen/main.png "Main screenshot")](query-viewer/readme.md)
+
+## [Reset-customization](reset-customization/readme.md)
+[![results](reset-customization/screen/main.png "Main screenshot")](reset-customization/readme.md)
 
 ## [Results](results/readme.md)
 [![results](results/screen/main.png "Main screenshot")](results/readme.md)
