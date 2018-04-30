@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html" charset="UTF-8">
+    <title>Reset customization</title>
+
+    <!-- Add Popoto default CSS styles -->
+    <link rel="stylesheet" href="https://unpkg.com/popoto/dist/popoto.min.css">
+    <style>
+        #popoto-graph:fullscreen {
+            width: 100%;
+            height: 100%;
+        }
+
+        #popoto-graph:-webkit-full-screen {
+            width: 100%;
+            height: 100%;
+        }
+
+        #popoto-graph:-moz-full-screen {
+            width: 100%;
+            height: 100%;
+        }
+
+        #popoto-graph:-ms-fullscreen {
+            width: 100%;
+            height: 100%;
+        }
+        .ppt-div-graph{
+            height: 400px;
+        }
+    </style>
+</head>
+<body class="ppt-body">
+
+<section class="ppt-section-main" style="height: 900px">
+    <div class="ppt-section-header">
+        <span class="ppt-header-span">Reset</span> customization
+    </div>
+
+    <div id="popoto-graph" class="ppt-div-graph">
+        <!-- Graph will be generated here-->
+    </div>
+
+    <div class="ppt-section-header">
+        <!-- The total results count is updated with a listener defined below -->
+        RESULTS <span id="result-total-count" class="ppt-count"></span>
+    </div>
+
+    <div id="popoto-results" class="ppt-container-results">
+        <!-- Results will be generated here -->
+    </div>
+
+</section>
+
+<!-- Required scripts -->
+<script src="https://unpkg.com/jquery" charset="utf-8"></script>
+<script src="https://unpkg.com/d3" charset="utf-8"></script>
+<script src="https://unpkg.com/popoto" charset="utf-8"></script>
+
+<script>
+    var data = [
+        "Charlize Theron",
+        "Orlando Jones",
+        "Patricia Clarkson",
+        "Helen Hunt",
+        "Victor Garber",
+        "Jessica Thompson",
+        "Robert Longo",
+        "Tom Cruise",
+        "Bill Paxton",
+        "Michael Sheen",
+        "Carrie-Anne Moss",
+        "Val Kilmer",
+        "Sam Rockwell",
+        "Parker Posey",
+        "Bruno Kirby",
+        "Robert Zemeckis",
+        "Philip Seymour Hoffman",
+        "Billy Crystal",
+        "Gary Sinise",
+        "Stephen Rea",
+        "Michael Clarke Duncan",
+        "Dave Chappelle",
+        "Tom Tykwer",
+        "Penny Marshall",
+        "Milos Forman",
+        "Christina Ricci",
+        "Brooke Langton",
+        "Carrie Fisher",
+        "Clint Eastwood",
+        "John Goodman",
+        "Kevin Pollak",
+        "Howard Deutch",
+        "Natalie Portman"];
+
+    /**
+     * URL used to access Neo4j REST API to execute queries.
+     * Update this parameter to your running server instance.
+     *
+     * For more information on Neo4J REST API the documentation is available here: http://neo4j.com/docs/stable/rest-api-cypher.html
+     */
+
+    // Demo Neo4j database settings hosted on GrapheneDb
+    popoto.rest.CYPHER_URL = "https://db-kh9ct9ai1mqn6hz2itry.graphenedb.com:24780/db/data/transaction/commit";
+    popoto.rest.AUTHORIZATION = "Basic cG9wb3RvOmIuVlJZQVF2blZjV2tyLlRaYnpmTks5aHp6SHlTdXk=";
+
+    // Activate the fit text option
+    popoto.graph.USE_FIT_TEXT = true;
+
+    // Add RESET_GRAPH option in toolbar
+    popoto.tools.RESET_GRAPH = true;
+
+    // Hide All other toolbar options
+    popoto.tools.CENTER_GRAPH = false;
+    popoto.tools.SAVE_GRAPH = false;
+    popoto.tools.TOGGLE_TAXONOMY = false;
+    popoto.tools.TOGGLE_FULL_SCREEN = false;
+    popoto.tools.TOGGLE_VIEW_RELATION = false;
+
+    // Hide node relation
+    popoto.graph.DISABLE_RELATION = true;
+
+    /**
+     * Define the Label provider you need for your application.
+     * This configuration is mandatory and should contain at least all the labels you could find in your graph model.
+     *
+     * In this version only nodes with a label are supported.
+     *
+     * By default If no attributes are specified Neo4j internal ID will be used.
+     * These label provider configuration can be used to customize the node display in the graph.
+     * See www.popotojs.com or example for more details on available configuration options.
+     */
+    popoto.provider.node.Provider = {
+        "Person": {
+            "returnAttributes": ["name", "born"],
+            "constraintAttribute": "name"
+        }
+    };
+
+    /**
+     * Here a listener is used to retrieve the total results count and update the page accordingly.
+     * This listener will be called on every graph modification.
+     */
+    popoto.result.onTotalResultCount(function (count) {
+        document.getElementById("result-total-count").innerHTML = "(" + count + ")";
+    });
+
+    /**
+     * Here a listener is used to customize the reset action.
+     * This listener will be called on every click on reset graph button.
+     */
+    popoto.graph.onReset(function () {
+
+        popoto.graph.mainLabel = {
+            label: "Person",
+            value: {
+                name: data[Math.floor(Math.random() * (data.length - 1))]
+            }
+        };
+
+        popoto.tools.reset();
+    });
+
+    /**
+     * Start popoto.js generation.
+     * The function requires the label to use as root element in the graph.
+     */
+    popoto.start("Person");
+
+</script>
+</body>
+</html>
