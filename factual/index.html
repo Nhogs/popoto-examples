@@ -4,11 +4,28 @@
     <meta http-equiv="Content-Type" content="text/html" charset="UTF-8">
     <title>Factual</title>
 
+    <!-- Import Google Icon Font-->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+    <!-- Import materialize.css-->
+    <link rel="stylesheet" href="https://unpkg.com/materialize-css@next/dist/css/materialize.min.css">
+
+    <!-- Import mapbox stylesheet -->
     <link href='https://api.mapbox.com/mapbox-gl-js/v0.44.1/mapbox-gl.css' rel='stylesheet'/>
+
+    <!-- Let browser know website is optimized for mobile -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+    <!-- Add Popoto default CSS styles -->
     <link rel="stylesheet" href="https://unpkg.com/popoto/dist/popoto.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/css/materialize.min.css">
+
+    <!-- Add auto-complete stylesheet -->
     <link rel="stylesheet" href="css/auto-complete.css">
     <style>
+        .collapsible-header:focus {
+            outline: 0;
+        }
+
         #popoto-graph:fullscreen {
             width: 100%;
             height: 100%;
@@ -96,6 +113,15 @@
         .mapboxgl-popup-anchor-top > .mapboxgl-popup-tip {
             border-bottom-color: #91c949;
         }
+
+        .ppt-taxo-ul ul {
+            padding-left: 1em !important;
+        }
+
+        .ppt-taxo-ul {
+            font-size: 14.5px;
+        }
+
     </style>
 </head>
 <body style="background-color: #2e3138;">
@@ -125,8 +151,10 @@
                     class="ppt-icon ppt-icon-logo" style="color:#8bb71a;"></i> Graph
                 Query
             </div>
-            <div class="collapsible-body no-padding" style="border-bottom: 0;">
-                <div id="popoto-graph" class="ppt-div-graph" style="height: 600px;">
+            <div class="collapsible-body no-padding" style="height: 792px; border-bottom: 0;">
+                <div id="popoto-taxonomy" class="ppt-taxo-nav" style="color: white; width: 280px">
+                </div>
+                <div id="popoto-graph" class="ppt-div-graph">
                 </div>
             </div>
         </li>
@@ -171,7 +199,7 @@
 <script src="https://unpkg.com/jquery" charset="utf-8"></script>
 <script src="https://unpkg.com/d3" charset="utf-8"></script>
 <script src="https://unpkg.com/popoto" charset="utf-8"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/js/materialize.min.js"></script>
+<script src="https://unpkg.com/materialize-css@next" charset="utf-8"></script>
 <script src="js/auto-complete.min.js"></script>
 <script src="js/autocomplete.js"></script>
 <script src="js/map.js"></script>
@@ -179,7 +207,7 @@
     popoto.rest.CYPHER_URL = "https://db-kh9ct9ai1mqn6hz2itry.graphenedb.com:24780/db/data/transaction/commit";
     popoto.rest.AUTHORIZATION = "Basic cG9wb3RvOmIuVlJZQVF2blZjV2tyLlRaYnpmTks5aHp6SHlTdXk=";
 
-    popoto.result.RESULTS_PAGE_SIZE = 2000;
+    popoto.result.RESULTS_PAGE_SIZE = 15;
     popoto.query.MAX_RESULTS_COUNT = 2000;
 
     popoto.graph.WHEEL_ZOOM_ENABLED = false;
@@ -192,13 +220,21 @@
             "displayResults": function (resultElement) {
 
                 resultElement
+                    .on("click", function (r) {
+                        flyToResult(r)
+                    });
+
+                resultElement
                     .append("span")
                     .attr("class", "result-title")
                     .text(function (d) {
                         return d.attributes.name;
-                    })
-                    .on("click", function (r) {
-                        flyToResult(r)
+                    });
+
+                resultElement
+                    .append("div")
+                    .text(function (d) {
+                        return d.attributes.locality + " · " + d.attributes.address + " · " + d.attributes.postcode + " · " + d.attributes.tel
                     });
 
             }
@@ -223,34 +259,42 @@
 
         },
         "Neighborhood": {
+            isSearchable: false,
             returnAttributes: ["name", "id"],
             constraintAttribute: "id"
         },
         "Locality": {
+            isSearchable: false,
             returnAttributes: ["name"],
             constraintAttribute: "name"
         },
         "Region": {
+            isSearchable: false,
             returnAttributes: ["code"],
             constraintAttribute: "code"
         },
         "PriceCategory": {
+            isSearchable: false,
             returnAttributes: ["value"],
             constraintAttribute: "value"
         },
         "Rating": {
+            isSearchable: false,
             returnAttributes: ["value"],
             constraintAttribute: "value"
         },
         "Year": {
+            isSearchable: false,
             returnAttributes: ["value"],
             constraintAttribute: "value"
         },
         "Country": {
+            isSearchable: false,
             returnAttributes: ["code"],
             constraintAttribute: "code"
         },
         "Owner": {
+            isSearchable: false,
             returnAttributes: ["name"],
             constraintAttribute: "name"
         }
@@ -289,6 +333,7 @@
         }
 
     };
+
     popoto.result.onTotalResultCount(function (count) {
         document.getElementById("result-total-count").innerHTML = "(" + count + ")";
     });
