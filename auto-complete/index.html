@@ -27,6 +27,11 @@
             width: 100%;
             height: 100%;
         }
+
+        .collapsible-header:focus {
+            outline: 0;
+        }
+
     </style>
 </head>
 <body style="background-color: #2e3138;">
@@ -56,8 +61,10 @@
                     class="ppt-icon ppt-icon-logo" style="color:#8bb71a;"></i> Graph
                 Query
             </div>
-            <div class="collapsible-body no-padding" style="border-bottom: 0;">
-                <div id="popoto-graph" class="ppt-div-graph" style="height: 600px;">
+            <div class="collapsible-body no-padding" style="height: 600px; border-bottom: 0;">
+                <div id="popoto-taxonomy" class="ppt-taxo-nav" style="color: white; width: 280px">
+                </div>
+                <div id="popoto-graph" class="ppt-div-graph">
                 </div>
             </div>
         </li>
@@ -129,7 +136,7 @@
 
                 var div1 = pResultElmt.append("div").attr("style", "display: flex;");
                 div1.append("img")
-                    .attr("height", "200px")
+                    .attr("height", "100px")
                     .attr("src", function (result) {
                         return 'image/node/person/person.svg';
                         // return "../material/person/" + result.attributes.name + ".jpg";
@@ -137,7 +144,7 @@
 
                 var div = div1.append("div").attr("style", "margin-left: 20px;");
                 // An <h3> element containing the person name
-                div.append("h3")
+                div.append("h4")
                     .text(function (result) {
                         return result.attributes.name;
                     });
@@ -165,6 +172,40 @@
                 //     return "../material/movie/" + node.value[0].attributes['title'] + ".jpg"
                 // }
                 return 'image/node/movie/movie.svg';
+            },
+            "displayResults": function (pResultElmt) {
+
+                var div1 = pResultElmt.append("div").attr("style", "display: flex;");
+                div1.append("img")
+                    .attr("height", "100px")
+                    .attr("src", function (result) {
+                        return 'image/node/movie/movie.svg';
+                    });
+
+                var div = div1.append("div").attr("style", "margin-left: 20px;");
+                // An <h3> element containing the movie title
+                div.append("h4")
+                    .attr("style", "margin-top: 0;")
+                    .text(function (result) {
+                        return result.attributes.title;
+                    });
+
+                // A <span> element with the movie tagline
+                div.append("div").filter(function (result) {
+                    // Filter on attribute having born attribute value
+                    return result.attributes.tagline;
+                }).append("span").text(function (result) {
+                    return result.attributes.tagline;
+                });
+
+                // A <span> element with the release date
+                div.append("div").filter(function (result) {
+                    // Filter on attribute having born attribute value
+                    return result.attributes.released;
+                }).append("span").text(function (result) {
+                    return "Release date: " + result.attributes.released;
+                });
+
             }
         }
     };
