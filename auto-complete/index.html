@@ -32,6 +32,16 @@
             outline: 0;
         }
 
+        .ppt-taxo__span-icon.Person:before {
+            content: "\f2be";
+            color: #2aa1d3;
+        }
+
+        .ppt-taxo__span-icon.Movie:before {
+            content: "\e914";
+            color: #8bb71a;
+        }
+
     </style>
 </head>
 <body style="background-color: #2e3138;">
@@ -85,7 +95,7 @@
         <!-- ======================================================================================================= -->
         <li id="p-collapsible-results" class="active">
             <div class="collapsible-header white-text" style="background-color: #525863;border-bottom: 0;"><i
-                    class="ppt-icon ppt-icon-user-circle-o" style="color:#8bb71a;"></i>Results&nbsp;
+                    class="ppt-icon ppt-icon-sort-alpha-asc" style="color:#8bb71a;"></i>Results&nbsp;
                 <span class="" id="result-total-count">0</span>
             </div>
             <div class="collapsible-body no-padding" style="border-bottom: 0;">
@@ -160,9 +170,12 @@
             }
         },
         "Movie": {
-            returnAttributes: ["title", "tagline", "released"],
-            constraintAttribute: "title",
-            getDisplayType: function (node) {
+            "returnAttributes": ["title", "tagline", "released"],
+            "constraintAttribute": "title",
+            "resultOrderByAttribute": "title",
+            "valueOrderByAttribute": "title",
+            "isValueOrderAscending": true,
+            "getDisplayType": function (node) {
                 return popoto.provider.node.DisplayTypes.IMAGE;
             },
             "getImagePath": function (node) {
