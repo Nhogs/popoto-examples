@@ -3,5 +3,28 @@
   "version": "0.0.1",
   "dependencies": {
     "popoto": "latest"
+  },
+  "nhogs": {
+    "examples": {
+      "list": [
+        "auto-complete",
+        "css-customization",
+        "cypher-viewer",
+        "factual",
+        "fit-text",
+        "marker",
+        "materialize",
+        "multiple-selection",
+        "northwind",
+        "query-viewer",
+        "reset-customization",
+        "results",
+        "save",
+        "simple-graph",
+        "start-from-schema",
+        "taxonomy",
+        "us-regions"
+      ]
+    }
   }
 }
