@@ -270,9 +270,9 @@
                 onOpenEnd: function (el) {
                     var id = el.id;
                     if (id === "p-collapsible-popoto") {
-                        if (popoto.graph.getRootNode() !== undefined) {
-                            popoto.graph.getRootNode().px = $('#p-collapsible-popoto').width() / 2;
-                            popoto.graph.getRootNode().py = 300;
+                        if (popoto.dataModel.getRootNode() !== undefined) {
+                            popoto.dataModel.getRootNode().px = $('#p-collapsible-popoto').width() / 2;
+                            popoto.dataModel.getRootNode().py = 300;
                             popoto.updateGraph();
                         }
                     }
