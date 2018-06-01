@@ -53,7 +53,7 @@ var main = new autoComplete({
         document.getElementById('search').value = "";
         $("#search").blur();
 
-        popoto.graph.node.addRelatedValues(popoto.dataModel.getRootNode(), [{
+        popoto.graph.node.addRelatedValues(popoto.graph.getRootNode(), [{
             id: id,
             rel: rel,
             label: label
