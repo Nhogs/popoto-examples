@@ -26,6 +26,6 @@ In this customization example when a relation is added all the other one on the 
     });
 ```
 
-[![Main screenshot](https://nhogs.github.io/popoto-examples/add-relation-event/screen/main.png "Main screenshot")](https://nhogs.github.io/popoto-examples/results/index.html)
+[![Main screenshot](https://nhogs.github.io/popoto-examples/add-relation-event/screen/main.png "Main screenshot")](https://nhogs.github.io/popoto-examples/add-relation-event/index.html)
 
 [Live version here](https://nhogs.github.io/popoto-examples/add-relation-event/index.html)
