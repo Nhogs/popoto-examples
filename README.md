@@ -3,7 +3,7 @@ Contains a list of Popoto.js examples
 
 <table>
     <tr valign="top">
-        <td width="25%">Add-relation-event<br><a href="add-relation-event/readme.md"><img width="222" src="auto-complete/screen/main.png"></a></td>
+        <td width="25%">Add-relation-event<br><a href="add-relation-event/readme.md"><img width="222" src="add-relation-event/screen/main.png"></a></td>
         <td width="25%">Auto-complete<br><a href="auto-complete/readme.md"><img width="222" src="auto-complete/screen/main.png"></a></td>
         <td width="25%">Css-customization<br><a href="css-customization/readme.md"><img width="222" src="css-customization/screen/main.png"></a></td>
         <td width="25%">Cypher-viewer<br><a href="cypher-viewer/readme.md"><img width="222" src="cypher-viewer/screen/main.png"></a></td>
