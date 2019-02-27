@@ -1,6 +1,6 @@
 {
   "name": "popoto-examples",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "dependencies": {
     "d3": "5.7.0",
     "jquery": "^3.3.1",
