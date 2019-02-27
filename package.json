@@ -2,7 +2,9 @@
   "name": "popoto-examples",
   "version": "0.0.1",
   "dependencies": {
-    "popoto": "latest"
+    "d3": "5.7.0",
+    "jquery": "^3.3.1",
+    "popoto": "^2.0.17"
   },
   "nhogs": {
     "examples": {
