@@ -1,3 +1,6 @@
 .idea
 node_modules
+!node_modules/jquery
+!node_modules/d3
+!node_modules/popoto
 package-lock.json
