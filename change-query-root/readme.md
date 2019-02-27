@@ -4,7 +4,7 @@ Example of [Popoto.js](https://github.com/Nhogs/popoto) use with dynamic query r
 
 [![Main screenshot](https://nhogs.github.io/popoto-examples/change-query-root/screen/main.png "Main screenshot")](https://nhogs.github.io/popoto-examples/change-query-root/index.html)
 
-In this example the idea is the get current graph schema, bend the data to change the root node and reset the graph: 
+In this example the idea is to get current graph schema, modify the data, change the root node and reset the graph: 
 
 ```javascript
 function changeQueryRoot() {
