@@ -2,7 +2,7 @@
 
 Example of [Popoto.js](https://github.com/Nhogs/popoto) use with dynamic query root change experimentation.
 
-[![Main screenshot](screen/main.png "Main screenshot")](index.html)
+[![Main screenshot](https://nhogs.github.io/popoto-examples/change-query-root/screen/main.png "Main screenshot")](https://nhogs.github.io/popoto-examples/change-query-root/index.html)
 
 In this example the idea is the get current graph schema, bend the data to change the root node and reset the graph: 
 
