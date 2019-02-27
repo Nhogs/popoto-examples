@@ -12,6 +12,10 @@ CREATE CONSTRAINT ON (region:`Region`) ASSERT region.code IS UNIQUE;
 CREATE CONSTRAINT ON (country:`Country`) ASSERT country.code IS UNIQUE;
 CREATE CONSTRAINT ON (neighborhood:`Neighborhood`) ASSERT neighborhood.id IS UNIQUE;
 
+CREATE CONSTRAINT ON (chain:`Chain`) ASSERT chain.id IS UNIQUE;
+CREATE CONSTRAINT ON (cuisine:`Cuisine`) ASSERT cuisine.name IS UNIQUE;
+CREATE CONSTRAINT ON (founded:`Founded`) ASSERT founded.year IS UNIQUE;
+
 // Create all node with properties if defined
 LOAD CSV WITH HEADERS FROM 'https://nhogs.github.io/popoto-examples/factual/csv/us_restaurants_sample.csv' AS row
 MERGE (node:Social {id: row.factual_id})
@@ -122,3 +126,43 @@ MERGE (neig:Neighborhood {id: row.locality + neighborhood, name: neighborhood})
 MERGE (locality:Locality {name: row.locality})
 MERGE (node)-[:LOCATED_NEAR]->(neig)
 MERGE (neig)-[:LOCATED_IN]->(locality)
+
+// Create PART_OF -> Chain relations
+LOAD CSV WITH HEADERS FROM 'https://nhogs.github.io/popoto-examples/factual/csv/us_restaurants_sample.csv' AS row
+WITH row
+  WHERE row.chain_id <> ''
+MERGE (node {id: row.factual_id})
+MERGE (chain:Chain {id: row.chain_id, name: row.chain_name})
+MERGE (node)-[:PART_OF]->(chain)
+
+
+
+MATCH (h:head)-[hhs:HAS_SKILL]->(sh:Skill), (l:legs)-[lhs:HAS_SKILL]->(sl:Skill)
+  WHERE
+  (
+   (sh. id = '26' OR sl.id = '26')
+   AND
+   (
+    (toInt(hhs.level) >= 1)
+      OR
+    (toInt(lhs.level) >= 1)
+      OR
+    ((toInt(hhs.level) + toInt(lhs.level)) >= 1)
+   )
+  )
+  AND
+  (
+  (
+  (toInt(hhs.level) >= 2)
+  OR
+  (toInt(lhs.level) >= 2)
+  OR
+  ((toInt(hhs.level) + toInt(lhs.level)) >= 2)
+  )
+  AND
+  (
+  sh. id = '15' OR sl.id = '15'
+  )
+  )
+RETURN DISTINCT {head: h.id, skill: collect(sh.id), level: collect(hhs.level)},
+                {legs: l.id, skill: collect(sl.id), level: collect(lhs.level)}

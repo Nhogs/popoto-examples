@@ -1,6 +1,8 @@
 .idea
 node_modules
-!node_modules/jquery
 !node_modules/d3
+!node_modules/jquery
+!node_modules/materialize-css
 !node_modules/popoto
+!node_modules/vis
 package-lock.json

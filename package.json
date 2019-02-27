@@ -4,7 +4,9 @@
   "dependencies": {
     "d3": "5.7.0",
     "jquery": "^3.3.1",
-    "popoto": "^2.0.17"
+    "popoto": "^2.0.17",
+    "vis": "^4.21.0",
+    "materialize-css": "^1.0.0"
   },
   "nhogs": {
     "examples": {

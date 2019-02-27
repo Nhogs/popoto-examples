@@ -8,7 +8,7 @@
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
     <!-- Import materialize.css-->
-    <link rel="stylesheet" href="https://unpkg.com/materialize-css@next/dist/css/materialize.min.css">
+    <link rel="stylesheet" href="../node_modules/materialize-css/dist/css/materialize.min.css">
 
     <!-- Import mapbox stylesheet -->
     <link href='https://api.mapbox.com/mapbox-gl-js/v0.44.1/mapbox-gl.css' rel='stylesheet'/>
@@ -17,7 +17,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 
     <!-- Add Popoto default CSS styles -->
-    <link rel="stylesheet" href="https://unpkg.com/popoto/dist/popoto.min.css">
+    <link rel="stylesheet" href="../node_modules/popoto/dist/popoto.min.css">
 
     <!-- Add auto-complete stylesheet -->
     <link rel="stylesheet" href="css/auto-complete.css">
@@ -196,10 +196,10 @@
 </footer>
 
 <script src='https://api.mapbox.com/mapbox-gl-js/v0.44.1/mapbox-gl.js'></script>
-<script src="https://unpkg.com/jquery" charset="utf-8"></script>
-<script src="https://unpkg.com/d3" charset="utf-8"></script>
-<script src="https://unpkg.com/popoto" charset="utf-8"></script>
-<script src="https://unpkg.com/materialize-css@next" charset="utf-8"></script>
+<script src="../node_modules/jquery/dist/jquery.min.js" charset="utf-8"></script>
+<script src="../node_modules/d3/dist/d3.min.js" charset="utf-8"></script>
+<script src="../node_modules/popoto/dist/popoto.min.js" charset="utf-8"></script>
+<script src="../node_modules/materialize-css/dist/js/materialize.min.js" charset="utf-8"></script>
 <script src="js/auto-complete.min.js"></script>
 <script src="js/autocomplete.js"></script>
 <script src="js/map.js"></script>
@@ -209,6 +209,7 @@
 
     popoto.result.RESULTS_PAGE_SIZE = 15;
     popoto.query.MAX_RESULTS_COUNT = 2000;
+    popoto.graph.USE_FIT_TEXT = true;
 
     popoto.graph.WHEEL_ZOOM_ENABLED = false;
 
@@ -297,6 +298,14 @@
             isSearchable: false,
             returnAttributes: ["name"],
             constraintAttribute: "name"
+        },
+        "Chain": {
+            isSearchable: false,
+            returnAttributes: ["name", "id"],
+            constraintAttribute: "id",
+            "getDisplayType": function (node) {
+                return popoto.provider.node.DisplayTypes.IMAGE;
+            }
         }
     };
 
