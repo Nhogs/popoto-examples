@@ -1,1 +1,34 @@
 /* You can add global styles to this file, and also import other style files */
+#popoto-graph:fullscreen {
+    width: 100%;
+    height: 100%;
+}
+
+#popoto-graph:-webkit-full-screen {
+    width: 100%;
+    height: 100%;
+}
+
+#popoto-graph:-moz-full-screen {
+    width: 100%;
+    height: 100%;
+}
+
+#popoto-graph:-ms-fullscreen {
+    width: 100%;
+    height: 100%;
+}
+
+.collapsible-header:focus {
+    outline: 0;
+}
+
+.ppt-taxo__span-icon.Person:before {
+    content: "\f2be";
+    color: #2aa1d3;
+}
+
+.ppt-taxo__span-icon.Movie:before {
+    content: "\e914";
+    color: #8bb71a;
+}

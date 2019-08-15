@@ -19,6 +19,9 @@
     "@angular/platform-browser": "~8.0.0",
     "@angular/platform-browser-dynamic": "~8.0.0",
     "@angular/router": "~8.0.0",
+    "@types/jquery": "^3.3.31",
+    "materialize-css": "^1.0.0",
+    "popoto": "^2.0.18",
     "rxjs": "~6.4.0",
     "tslib": "^1.9.0",
     "zone.js": "~0.9.1"

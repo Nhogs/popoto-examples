@@ -1,31 +1,27 @@
 # AngularApp
 
+Example of [Popoto.js](http://popotojs.com/) on Neo4j movie dataset in angular 2+ app.
+
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 8.0.1.
 
-## Development server
+## Add popoto to angular 2+ app
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+1. do `yarn add popoto` (or `npm i popoto`)
 
-## Code scaffolding
+2. add `import * as popoto from 'popoto'` to top of `component.ts`
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+![Add import](https://github.com/sag3ll0/popoto-examples/angular-app/screen/import.png "Add import")
 
-## Build
+3. add code for initialization (config) popoto to `ngOnInit()` function (**not in `constructor`**)
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build.
+![Add configuration popoto](https://github.com/sag3ll0/popoto-examples/angular-app/screen/ngOnInit.png "Add configuration popoto")
 
-## Running unit tests
+4. add html template to `app.component.html`
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+5. add `"node_modules/popoto/dist/popoto.min.css"` to `angular.json > projects > angular-app > architect > build > options > styles` section
 
-## Running end-to-end tests
+![Add css to angular.json](https://github.com/sag3ll0/popoto-examples/angular-app/screen/css.png "Add css to angular.json")
 
-Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
+[![Main screenshot](https://github.com/sag3ll0/popoto-examples/angular-app/screen/main.png "Main screenshot")](https://github.com/sag3ll0/popoto-examples/angular-app/dist/angular-app/index.html)
 
-## Further help
-
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
-
-## init Project
-
-ng new angular-app --minimal=true --routing=true --skip-tests=true
+[Live version here](https://github.com/sag3ll0/popoto-examples/angular-app/dist/angular-app/index.html)
