@@ -4,9 +4,7 @@ Example of [Popoto.js](http://popotojs.com/) on Neo4j movie dataset in angular 2
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 8.0.1.
 
-[![Main screenshot](./screen/main.png "Main screenshot")](https://github.com/sag3ll0/popoto-examples/blob/feature/angular-app/angular-app/dist/angular-app/index.html)
-
-[Live version here](https://github.com/sag3ll0/popoto-examples/blob/feature/angular-app/angular-app/dist/angular-app/index.html)
+![Main screenshot](./screen/main.png "Main screenshot")
 
 ## Add popoto to angular 2+ app
 
@@ -25,3 +23,4 @@ This project was generated with [Angular CLI](https://github.com/angular/angular
 5. add `"node_modules/popoto/dist/popoto.min.css"` to `angular.json > projects > angular-app > architect > build > options > styles` section
 
 ![Add css to angular.json](./screen/css.png "Add css to angular.json")
+
