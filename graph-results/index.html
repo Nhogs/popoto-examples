@@ -4,31 +4,14 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html" charset="UTF-8">
     <title>Graph Results</title>
+    <link rel="icon" href="../favicon.ico"/>
 
     <!-- Add Popoto default CSS styles -->
     <link rel="stylesheet" href="../node_modules/popoto/dist/popoto.min.css">
     <link rel="stylesheet" href="../node_modules/vis/dist/vis-network.min.css">
+    <link rel="stylesheet" href="../shared.css">
+
     <style>
-        #popoto-graph:fullscreen {
-            width: 100%;
-            height: 100%;
-        }
-
-        #popoto-graph:-webkit-full-screen {
-            width: 100%;
-            height: 100%;
-        }
-
-        #popoto-graph:-moz-full-screen {
-            width: 100%;
-            height: 100%;
-        }
-
-        #popoto-graph:-ms-fullscreen {
-            width: 100%;
-            height: 100%;
-        }
-
         .ppt-div-graph {
             height: 50%;
         }
@@ -75,15 +58,19 @@
 </section>
 
 <!-- Required scripts -->
-<script src="../node_modules/jquery/dist/jquery.min.js" charset="utf-8"></script>
+<script src="../shared.js" charset="utf-8"></script>
 <script src="../node_modules/d3/dist/d3.min.js" charset="utf-8"></script>
-<script src="../node_modules/popoto/dist/popoto.min.js" charset="utf-8"></script>
+<script src="../node_modules/neo4j-driver-lite/lib/browser/neo4j-lite-web.min.js" charset="utf-8"></script>
+<script src="../node_modules/popoto/dist/popoto.js" charset="utf-8"></script>
 <script src="../node_modules/vis/dist/vis-network.min.js" charset="utf-8"></script>
 <script>
 
-    // Demo Neo4j database settings hosted on GrapheneDb
-    popoto.rest.CYPHER_URL = "https://db-kh9ct9ai1mqn6hz2itry.graphenedb.com:24780/db/data/transaction/commit";
-    popoto.rest.AUTHORIZATION = "Basic cG9wb3RvOmIuVlJZQVF2blZjV2tyLlRaYnpmTks5aHp6SHlTdXk=";
+    var driver = neo4j.driver(
+        "neo4j+s://dff437fa.databases.neo4j.io",
+        neo4j.auth.basic("popoto", "popotopassword"),
+    );
+
+    popoto.runner.DRIVER = driver
 
     // Define the list of label provider to customize the graph behavior:
     // Only two labels are used in Neo4j movie graph example: "Movie" and "Person"
@@ -129,52 +116,52 @@
     /**
      * Add a listener on result received to update map.
      */
-    popoto.result.onGraphResultReceived(
-        function (graphResultObject) {
-
-            var nodes = convertNodes(graphResultObject.nodes);
-            var edges = convertEdges(graphResultObject.edges);
-            var container = document.getElementById('vis');
-
-            // provide the data in the vis format
-            var data = {
-                nodes: nodes,
-                edges: edges
-            };
-            var options = {
-                nodes: {
-                    shape: 'circle',
-                    borderWidth: 2,
-                    size: 20,
-                    font: {
-                        size: 10,
-                        color: '#ffffff'
-                    }
-                },
-                edges: {
-                    length: 200,
-                    font: {
-                        align: 'top',
-                        color: '#ffffff',
-                        strokeWidth: 0,
-                        size: 10
-                    },
-                    arrows: 'to'
-                },
-                groups: {
-                    "Person": {
-                        color: {background: '#68BDF6', border: '#5CA8DB'}
-                    },
-                    "Movie": {
-                        color: {background: '#FF756E', border: '#E06760'}
-                    }
-                }
-            };
-
-            // initialize the network
-            var network = new vis.Network(container, data, options);
-        }
-    );
+    // popoto.result.onGraphResultReceived(
+    //     function (graphResultObject) {
+    //
+    //         var nodes = convertNodes(graphResultObject.nodes);
+    //         var edges = convertEdges(graphResultObject.edges);
+    //         var container = document.getElementById('vis');
+    //
+    //         // provide the data in the vis format
+    //         var data = {
+    //             nodes: nodes,
+    //             edges: edges
+    //         };
+    //         var options = {
+    //             nodes: {
+    //                 shape: 'circle',
+    //                 borderWidth: 2,
+    //                 size: 20,
+    //                 font: {
+    //                     size: 10,
+    //                     color: '#ffffff'
+    //                 }
+    //             },
+    //             edges: {
+    //                 length: 200,
+    //                 font: {
+    //                     align: 'top',
+    //                     color: '#ffffff',
+    //                     strokeWidth: 0,
+    //                     size: 10
+    //                 },
+    //                 arrows: 'to'
+    //             },
+    //             groups: {
+    //                 "Person": {
+    //                     color: {background: '#68BDF6', border: '#5CA8DB'}
+    //                 },
+    //                 "Movie": {
+    //                     color: {background: '#FF756E', border: '#E06760'}
+    //                 }
+    //             }
+    //         };
+    //
+    //         // initialize the network
+    //         var network = new vis.Network(container, data, options);
+    //     }
+    // );
 
     function convertNodes(nodes) {
         var convertedNodes = [];
@@ -205,27 +192,34 @@
         return convertedEdges;
     }
 
-    // Start the generation using parameter as root label of the query.
-    popoto.start({
-            label: "Person",
-            rel: [
-                {
-                    label: "ACTED_IN",
-                    target: {
-                        label: "Movie",
-                        value: [
-                            {
-                                title: "The Matrix"
-                            },
-                            {
-                                title: "Johnny Mnemonic"
-                            },
-                        ]
+    driver.verifyConnectivity().then(function () {
+        throw new Error("Graph result is not supported since 3.0.0");
+        // Start the generation using parameter as root label of the query.
+        popoto.start({
+                label: "Person",
+                rel: [
+                    {
+                        label: "ACTED_IN",
+                        target: {
+                            label: "Movie",
+                            value: [
+                                {
+                                    title: "The Matrix"
+                                },
+                                {
+                                    title: "Johnny Mnemonic"
+                                },
+                            ]
+                        }
                     }
-                }
-            ]
-        }
-    );
+                ]
+            }
+        );
+    }).catch(function (error) {
+        document.getElementById("modal").style.display = "block";
+        document.getElementById("error-content").innerText = error;
+        console.error(error)
+    })
 
 </script>
 </body>
