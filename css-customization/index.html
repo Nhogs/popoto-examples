@@ -1,11 +1,15 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
     <meta http-equiv="Content-Type" content="text/html" charset="UTF-8">
     <title>Css customization</title>
+    <link rel="icon" href="../favicon.ico"/>
 
+    <!-- Add Popoto default CSS styles -->
     <link rel="stylesheet" href="../node_modules/popoto/dist/popoto.min.css">
+    <link rel="stylesheet" href="../shared.css">
+
     <style>
         body {
             font: 13px 'Helvetica Neue', Helvetica, Arial, sans-serif;
@@ -85,7 +89,7 @@
         }
 
         .ppt-taxo__span-icon:before {
-            content:none;
+            content: none;
         }
 
         .ppt-larrow {
@@ -307,13 +311,18 @@
 </div>
 
 <!-- Required scripts -->
-<script src="../node_modules/jquery/dist/jquery.min.js" charset="utf-8"></script>
+<script src="../shared.js" charset="utf-8"></script>
 <script src="../node_modules/d3/dist/d3.min.js" charset="utf-8"></script>
+<script src="../node_modules/neo4j-driver-lite/lib/browser/neo4j-lite-web.min.js" charset="utf-8"></script>
 <script src="../node_modules/popoto/dist/popoto.min.js" charset="utf-8"></script>
 <script>
-    // Demo Neo4j database settings hosted on GrapheneDb
-    popoto.rest.CYPHER_URL = "https://db-kh9ct9ai1mqn6hz2itry.graphenedb.com:24780/db/data/transaction/commit";
-    popoto.rest.AUTHORIZATION = "Basic cG9wb3RvOmIuVlJZQVF2blZjV2tyLlRaYnpmTks5aHp6SHlTdXk=";
+
+    var driver = neo4j.driver(
+        "neo4j+s://dff437fa.databases.neo4j.io",
+        neo4j.auth.basic("popoto", "popotopassword"),
+    );
+
+    popoto.runner.DRIVER = driver
 
     popoto.graph.link.SHOW_MARKER = true;
     // Disable toggle taxonomy tool button
@@ -434,8 +443,14 @@
         })
     });
 
-    // Start the generation using parameter as root label of the query.
-    popoto.start("Person");
+    driver.verifyConnectivity().then(function () {
+        // Start the generation using parameter as root label of the query.
+        popoto.start("Person");
+    }).catch(function (error) {
+        document.getElementById("modal").style.display = "block";
+        document.getElementById("error-content").innerText = error;
+        console.error(error)
+    })
 
 </script>
 </body>
