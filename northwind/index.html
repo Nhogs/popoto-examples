@@ -1,11 +1,15 @@
 <!DOCTYPE html>
-<!-- Generated with Popoto.js Configurator 1.0 -->
-<html>
+<html lang="en">
+
 <head>
     <meta http-equiv="Content-Type" content="text/html" charset="UTF-8">
     <title>Northwind</title>
+    <link rel="icon" href="../favicon.ico"/>
 
+    <!-- Add Popoto default CSS styles -->
     <link rel="stylesheet" href="../node_modules/popoto/dist/popoto.min.css">
+    <link rel="stylesheet" href="../shared.css">
+
     <style>
         .ppt-taxo__span-icon.Customer:before {
             content: "\f007";
@@ -64,7 +68,6 @@
             stroke-width: 49px;
             stroke: #b30000;
         }
-
     </style>
 </head>
 <body class="ppt-body">
@@ -90,7 +93,6 @@
     <div id="popoto-results" class="ppt-container-results">
         <!-- Results will be generated here -->
     </div>
-
 </section>
 <footer class="ppt-section-header">
 
@@ -99,18 +101,24 @@
         href="http://creativecommons.org/licenses/by/3.0/" title="Creative Commons BY 3.0" target="_blank">CC 3.0
     BY</a>
 </footer>
-<script src="../node_modules/jquery/dist/jquery.min.js" charset="utf-8"></script>
+
+<!-- Required scripts -->
+<script src="../shared.js" charset="utf-8"></script>
 <script src="../node_modules/d3/dist/d3.min.js" charset="utf-8"></script>
+<script src="../node_modules/neo4j-driver-lite/lib/browser/neo4j-lite-web.min.js" charset="utf-8"></script>
 <script src="../node_modules/popoto/dist/popoto.min.js" charset="utf-8"></script>
 <script>
 
-    // URL used to access Neo4j REST API to execute queries.
-    // popoto.rest.CYPHER_URL = "http://localhost:7474/db/data/transaction/commit";
-    // popoto.rest.AUTHORIZATION = "Basic " + btoa("neo4j:password");
+    /**
+     * Create neo4j driver
+     */
+    var driver = neo4j.driver(
+        "neo4j+s://dff437fa.databases.neo4j.io",
+        neo4j.auth.basic("popoto", "popotopassword"),
+        {disableLosslessIntegers: true}
+    );
 
-    // The data is available online on a GrapheneDB instance used here
-    popoto.rest.CYPHER_URL = "https://db-kh9ct9ai1mqn6hz2itry.graphenedb.com:24780/db/data/transaction/commit";
-    popoto.rest.AUTHORIZATION = "Basic cG9wb3RvOmIuVlJZQVF2blZjV2tyLlRaYnpmTks5aHp6SHlTdXk==";
+    popoto.runner.DRIVER = driver
 
     // If set to true, the relations properties will be returned.
     popoto.query.COLLECT_RELATIONS_WITH_VALUES = true;
@@ -195,8 +203,8 @@
      */
     function relationsAmount(relations) {
         return relations.reduce(function (a, rel) {
-            var relAmount = rel.quantity * parseFloat(rel.unitPrice);
-            var relDiscount = rel.discount * relAmount;
+            var relAmount = rel.properties.quantity * parseFloat(rel.properties.unitPrice);
+            var relDiscount = rel.properties.discount * relAmount;
 
             return (a + relAmount - relDiscount);
         }, 0).toFixed(2);
@@ -243,8 +251,13 @@
         document.getElementById("result-total-count").innerHTML = "(" + count + ")";
     });
 
-    popoto.start("Customer");
-
+    driver.verifyConnectivity().then(function () {
+        popoto.start("Customer");
+    }).catch(function (error) {
+        document.getElementById("modal").style.display = "block";
+        document.getElementById("error-content").innerText = error;
+        console.error(error)
+    })
 </script>
 </body>
 </html>
