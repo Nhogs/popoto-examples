@@ -134,35 +134,3 @@ WITH row
 MERGE (node {id: row.factual_id})
 MERGE (chain:Chain {id: row.chain_id, name: row.chain_name})
 MERGE (node)-[:PART_OF]->(chain)
-
-
-
-MATCH (h:head)-[hhs:HAS_SKILL]->(sh:Skill), (l:legs)-[lhs:HAS_SKILL]->(sl:Skill)
-  WHERE
-  (
-   (sh. id = '26' OR sl.id = '26')
-   AND
-   (
-    (toInt(hhs.level) >= 1)
-      OR
-    (toInt(lhs.level) >= 1)
-      OR
-    ((toInt(hhs.level) + toInt(lhs.level)) >= 1)
-   )
-  )
-  AND
-  (
-  (
-  (toInt(hhs.level) >= 2)
-  OR
-  (toInt(lhs.level) >= 2)
-  OR
-  ((toInt(hhs.level) + toInt(lhs.level)) >= 2)
-  )
-  AND
-  (
-  sh. id = '15' OR sl.id = '15'
-  )
-  )
-RETURN DISTINCT {head: h.id, skill: collect(sh.id), level: collect(hhs.level)},
-                {legs: l.id, skill: collect(sl.id), level: collect(lhs.level)}

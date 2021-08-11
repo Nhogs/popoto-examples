@@ -3,6 +3,7 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html" charset="UTF-8">
     <title>Factual</title>
+    <link rel="icon" href="../favicon.ico"/>
 
     <!-- Import Google Icon Font-->
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
@@ -18,32 +19,13 @@
 
     <!-- Add Popoto default CSS styles -->
     <link rel="stylesheet" href="../node_modules/popoto/dist/popoto.min.css">
+    <link rel="stylesheet" href="../shared.css">
 
     <!-- Add auto-complete stylesheet -->
     <link rel="stylesheet" href="css/auto-complete.css">
     <style>
         .collapsible-header:focus {
             outline: 0;
-        }
-
-        #popoto-graph:fullscreen {
-            width: 100%;
-            height: 100%;
-        }
-
-        #popoto-graph:-webkit-full-screen {
-            width: 100%;
-            height: 100%;
-        }
-
-        #popoto-graph:-moz-full-screen {
-            width: 100%;
-            height: 100%;
-        }
-
-        #popoto-graph:-ms-fullscreen {
-            width: 100%;
-            height: 100%;
         }
 
         .marker {
@@ -195,17 +177,24 @@
     <a href="https://www.mapbox.com/help/building-a-store-locator/">https://www.mapbox.com/help/building-a-store-locator/</a>
 </footer>
 
+<!-- Required scripts -->
+<script src="../shared.js" charset="utf-8"></script>
 <script src='https://api.mapbox.com/mapbox-gl-js/v0.44.1/mapbox-gl.js'></script>
-<script src="../node_modules/jquery/dist/jquery.min.js" charset="utf-8"></script>
 <script src="../node_modules/d3/dist/d3.min.js" charset="utf-8"></script>
+<script src="../node_modules/neo4j-driver-lite/lib/browser/neo4j-lite-web.min.js" charset="utf-8"></script>
 <script src="../node_modules/popoto/dist/popoto.min.js" charset="utf-8"></script>
 <script src="../node_modules/materialize-css/dist/js/materialize.min.js" charset="utf-8"></script>
 <script src="js/auto-complete.min.js"></script>
 <script src="js/autocomplete.js"></script>
 <script src="js/map.js"></script>
 <script>
-    popoto.rest.CYPHER_URL = "https://db-kh9ct9ai1mqn6hz2itry.graphenedb.com:24780/db/data/transaction/commit";
-    popoto.rest.AUTHORIZATION = "Basic cG9wb3RvOmIuVlJZQVF2blZjV2tyLlRaYnpmTks5aHp6SHlTdXk=";
+
+    var driver = neo4j.driver(
+        "neo4j+s://dff437fa.databases.neo4j.io",
+        neo4j.auth.basic("popoto", "popotopassword"),
+    );
+
+    popoto.runner.DRIVER = driver
 
     popoto.result.RESULTS_PAGE_SIZE = 15;
     popoto.query.MAX_RESULTS_COUNT = 2000;
@@ -434,7 +423,13 @@
             }
         });
 
-        popoto.start("Social");
+        driver.verifyConnectivity().then(function () {
+            popoto.start("Social");
+        }).catch(function (error) {
+            document.getElementById("modal").style.display = "block";
+            document.getElementById("error-content").innerText = error;
+            console.error(error)
+        })
     });
 
     /**
