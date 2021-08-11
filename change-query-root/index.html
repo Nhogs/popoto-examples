@@ -4,28 +4,13 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html" charset="UTF-8">
     <title>Change query root</title>
+    <link rel="icon" href="../favicon.ico"/>
+
+    <!-- Add Popoto default CSS styles -->
     <link rel="stylesheet" href="../node_modules/popoto/dist/popoto.min.css">
+    <link rel="stylesheet" href="../shared.css">
+
     <style>
-        #popoto-graph:fullscreen {
-            width: 100%;
-            height: 100%;
-        }
-
-        #popoto-graph:-webkit-full-screen {
-            width: 100%;
-            height: 100%;
-        }
-
-        #popoto-graph:-moz-full-screen {
-            width: 100%;
-            height: 100%;
-        }
-
-        #popoto-graph:-ms-fullscreen {
-            width: 100%;
-            height: 100%;
-        }
-
         .ppt-container-graph {
             background-color: #22252a;
             height: 600px;
@@ -73,15 +58,20 @@
 
 </section>
 
-<script src="../node_modules/jquery/dist/jquery.min.js" charset="utf-8"></script>
+<!-- Required scripts -->
+<script src="../shared.js" charset="utf-8"></script>
 <script src="../node_modules/d3/dist/d3.min.js" charset="utf-8"></script>
+<script src="../node_modules/neo4j-driver-lite/lib/browser/neo4j-lite-web.min.js" charset="utf-8"></script>
 <script src="../node_modules/popoto/dist/popoto.min.js" charset="utf-8"></script>
 
 <script>
 
-    // Demo Neo4j database settings hosted on GrapheneDb
-    popoto.rest.CYPHER_URL = "https://db-kh9ct9ai1mqn6hz2itry.graphenedb.com:24780/db/data/transaction/commit";
-    popoto.rest.AUTHORIZATION = "Basic cG9wb3RvOmIuVlJZQVF2blZjV2tyLlRaYnpmTks5aHp6SHlTdXk=";
+    var driver = neo4j.driver(
+        "neo4j+s://dff437fa.databases.neo4j.io",
+        neo4j.auth.basic("popoto", "popotopassword"),
+    );
+
+    popoto.runner.DRIVER = driver
 
     popoto.provider.node.Provider = {
         "Person": {
@@ -136,17 +126,24 @@
 
     d3.select("#randomize").on("click", changeQueryRoot);
 
-    popoto.start({
-        "label": "Person",
-        "rel": [
-            {"label": "ACTED_IN", "target": {"label": "Movie"}},
-            {"label": "DIRECTED", "target": {"label": "Movie"}},
-            {"label": "PRODUCED", "target": {"label": "Movie"}},
-            {"label": "WROTE", "target": {"label": "Movie"}},
-            {"label": "REVIEWED", "target": {"label": "Movie"}},
-            {"label": "FOLLOWS", "target": {"label": "Person"}}
-        ]
-    });
+    driver.verifyConnectivity().then(function () {
+
+        popoto.start({
+            "label": "Person",
+            "rel": [
+                {"label": "ACTED_IN", "target": {"label": "Movie"}},
+                {"label": "DIRECTED", "target": {"label": "Movie"}},
+                {"label": "PRODUCED", "target": {"label": "Movie"}},
+                {"label": "WROTE", "target": {"label": "Movie"}},
+                {"label": "REVIEWED", "target": {"label": "Movie"}},
+                {"label": "FOLLOWS", "target": {"label": "Person"}}
+            ]
+        });
+    }).catch(function (error) {
+        document.getElementById("modal").style.display = "block";
+        document.getElementById("error-content").innerText = error;
+        console.error(error)
+    })
 
 </script>
 </body>
