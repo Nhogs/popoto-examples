@@ -1,11 +1,11 @@
 {
   "name": "popoto-examples",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "dependencies": {
     "d3": "5.7.0",
-    "jquery": "^3.3.1",
-    "popoto": "^2.0.17",
-    "vis": "^4.21.0",
+    "neo4j-driver-lite": "^4.3.2",
+    "popoto": "^3.0.0-RC2",
+    "vis": "^4.21.0-EOL",
     "materialize-css": "^1.0.0"
   },
   "nhogs": {
