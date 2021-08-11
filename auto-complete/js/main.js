@@ -10,24 +10,23 @@ var main = new autoComplete({
                 "statement": query,
                 "parameters": {
                     term: term.toLowerCase()
-                },
-                "resultDataContents": ["row"]
+                }
             }
         ];
 
         popoto.logger.info("AutoComplete ==> ");
-        popoto.rest.post(
+        popoto.runner.run(
             {
                 "statements": statements
             })
-            .done(function (data) {
-                var res = data.results[0].data.map(function (d) {
-                    return d.row
+            .then(function (results) {
+                var data = popoto.runner.toObject(results)[0].map(function (d) {
+                    return [d.title, d.rel];
                 });
-                suggest(res);
+                suggest(data);
             })
-            .fail(function (xhr, textStatus, errorThrown) {
-                console.error(xhr, textStatus, errorThrown);
+            .catch(function (error) {
+                console.error(error);
                 suggest([]);
             });
     },
@@ -43,7 +42,7 @@ var main = new autoComplete({
             attributes: {title: title}
         });
 
-        return '<div class="autocomplete-suggestion" data-id="' + title + '" data-rel="' + rel + '" data-label="' + label + '" data-search="' + search + '"><img width="30px" height="45px" src="' + imagePath + '"> ' + rel + " "+ title.replace(re, "<b>$1</b>") + '</div>';
+        return '<div class="autocomplete-suggestion" data-id="' + title + '" data-rel="' + rel + '" data-label="' + label + '" data-search="' + search + '"><img width="30px" height="45px" src="' + imagePath + '"> ' + rel + " " + title.replace(re, "<b>$1</b>") + '</div>';
     },
     onSelect: function (e, term, item) {
         var id = item.getAttribute('data-id');
@@ -51,7 +50,7 @@ var main = new autoComplete({
         var label = item.getAttribute('data-label');
 
         document.getElementById('search').value = "";
-        $("#search").blur();
+        document.getElementById('search').blur();
 
         popoto.graph.node.addRelatedValues(popoto.graph.getRootNode(), [{
             id: id,
