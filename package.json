@@ -4,7 +4,7 @@
   "dependencies": {
     "d3": "5.7.0",
     "neo4j-driver-lite": "^4.3.2",
-    "popoto": "^3.0.0-RC2",
+    "popoto": "^3.0.2",
     "vis": "^4.21.0-EOL",
     "materialize-css": "^1.0.0"
   },
