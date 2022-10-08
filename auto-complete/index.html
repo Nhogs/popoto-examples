@@ -6,11 +6,13 @@
     <link rel="icon" href="../favicon.ico"/>
 
     <link rel="stylesheet" href="../node_modules/popoto/dist/popoto.min.css">
-    <link rel="stylesheet" href="../node_modules/materialize-css/dist/css/materialize.min.css">
     <link rel="stylesheet" href="css/auto-complete.css">
     <link rel="stylesheet" href="../shared.css">
 
     <style>
+        body{
+            color: white;
+        }
         .collapsible-header:focus {
             outline: 0;
         }
@@ -32,12 +34,13 @@
 <div class="navbar-fixed">
     <nav style="background-color: #444951;">
         <div class="nav-wrapper">
-            <form style="height:100%; margin-left: 8%; margin-right: 8%; background-color: #525863;"
+            <form style="height:100%; padding-left: 8%; padding-right: 8%; background-color: #525863;"
                   onsubmit="event.preventDefault(); return false;">
-                <div class="input-field">
-                    <input id="search" type="search" required>
-                    <label class="label-icon" for="search"><i
-                            class="ppt-icon ppt-icon-search-plus" style="color:#8bb71a;"></i></label>
+                <div style="display: flex;">
+                    <label class="label-icon" for="search">
+                        <i class="ppt-icon ppt-icon-search-plus" style="color:#8bb71a; font-size: 30px"></i>
+                    </label>
+                    <input id="search" class="search-input" type="search" required>
                 </div>
             </form>
         </div>
@@ -45,52 +48,48 @@
 </div>
 
 <div class="">
-    <ul id="collapsible-components" class="collapsible popout">
-        <!-- ======================================================================================================= -->
-        <!-- GRAPH QUERY-->
-        <!-- ======================================================================================================= -->
-        <li id="p-collapsible-popoto" class="active">
-            <div class="collapsible-header white-text" style="background-color: #525863; border-bottom: 0;"><i
-                    class="ppt-icon ppt-icon-logo" style="color:#8bb71a;"></i> Graph
-                Query
+    <!-- ======================================================================================================= -->
+    <!-- GRAPH QUERY-->
+    <!-- ======================================================================================================= -->
+    <div id="p-collapsible-popoto" class="active">
+        <div class="collapsible-header white-text" style="background-color: #525863; border-bottom: 0;"><i
+                class="ppt-icon ppt-icon-logo" style="color:#8bb71a;"></i> Graph Query
+        </div>
+        <div class="collapsible-body no-padding" style="height: 600px; border-bottom: 0;">
+            <div id="popoto-taxonomy" class="ppt-taxo-nav" style="color: white; width: 280px">
             </div>
-            <div class="collapsible-body no-padding" style="height: 600px; border-bottom: 0;">
-                <div id="popoto-taxonomy" class="ppt-taxo-nav" style="color: white; width: 280px">
-                </div>
-                <div id="popoto-graph" class="ppt-div-graph">
-                </div>
+            <div id="popoto-graph" class="ppt-div-graph">
             </div>
-        </li>
-        <!-- ======================================================================================================= -->
-        <!-- QUERY -->
-        <!-- ======================================================================================================= -->
-        <li id="p-collapsible-query" class="active">
-            <div class="collapsible-header white-text" style="background-color: #525863;border-bottom: 0;"><i
-                    class="ppt-icon ppt-icon-wrench" style="color:#8bb71a;"></i>Query
+        </div>
+    </div>
+    <!-- ======================================================================================================= -->
+    <!-- QUERY -->
+    <!-- ======================================================================================================= -->
+    <div id="p-collapsible-query" class="active">
+        <div class="collapsible-header white-text" style="background-color: #525863;border-bottom: 0;"><i
+                class="ppt-icon ppt-icon-wrench" style="color:#8bb71a;"></i>Query
+        </div>
+        <div class="collapsible-body no-padding" style="border-bottom: 0;">
+            <div id="popoto-cypher" class="ppt-container-cypher center-align">
             </div>
-            <div class="collapsible-body no-padding" style="border-bottom: 0;">
-                <div id="popoto-cypher" class="ppt-container-cypher center-align">
-                </div>
-            </div>
-        </li>
-        <!-- ======================================================================================================= -->
-        <!-- RESULTS -->
-        <!-- ======================================================================================================= -->
-        <li id="p-collapsible-results" class="active">
-            <div class="collapsible-header white-text" style="background-color: #525863;border-bottom: 0;"><i
-                    class="ppt-icon ppt-icon-sort-alpha-asc" style="color:#8bb71a;"></i>Results&nbsp;
-                <span class="" id="result-total-count">0</span>
-            </div>
-            <div class="collapsible-body no-padding" style="border-bottom: 0;">
-                <div class="row">
-                    <div id="popoto-results" class="col s12 cards-container">
+        </div>
+    </div>
+    <!-- ======================================================================================================= -->
+    <!-- RESULTS -->
+    <!-- ======================================================================================================= -->
+    <div id="p-collapsible-results" class="active">
+        <div class="collapsible-header white-text" style="background-color: #525863;border-bottom: 0;"><i
+                class="ppt-icon ppt-icon-sort-alpha-asc" style="color:#8bb71a;"></i>Results&nbsp;
+            <span class="" id="result-total-count">0</span>
+        </div>
+        <div class="collapsible-body no-padding" style="border-bottom: 0;">
+            <div class="row">
+                <div id="popoto-results" class="col s12 cards-container">
 
-                    </div>
                 </div>
             </div>
-        </li>
-    </ul>
-
+        </div>
+    </div>
 </div>
 
 <!-- Required scripts -->
@@ -98,7 +97,6 @@
 <script src="../node_modules/d3/dist/d3.min.js" charset="utf-8"></script>
 <script src="../node_modules/neo4j-driver-lite/lib/browser/neo4j-lite-web.min.js" charset="utf-8"></script>
 <script src="../node_modules/popoto/dist/popoto.min.js" charset="utf-8"></script>
-<script src="../node_modules/materialize-css/dist/js/materialize.min.js"></script>
 <script src="js/auto-complete.min.js"></script>
 <script src="js/main.js"></script>
 <script>
@@ -252,22 +250,6 @@
     function initCollapsible() {
 
         var element = document.querySelector('#collapsible-components');
-        var collapsible = new M.Collapsible(element,
-            {
-                accordion: false,
-                onOpenEnd: function (el) {
-                    var id = el.id;
-                    if (id === "p-collapsible-popoto") {
-                        if (popoto.graph.getRootNode() !== undefined) {
-                            popoto.graph.getRootNode().px = document.getElementById('#p-collapsible-popoto').width() / 2;
-                            popoto.graph.getRootNode().py = 300;
-                            popoto.updateGraph();
-                        }
-                    }
-                },
-                onCloseEnd: function (el) {
-                }
-            });
     }
 
     initCollapsible();
