@@ -84,7 +84,7 @@
                     // Filter on attribute having born attribute value
                     return result.attributes.born;
                 }).append("span").text(function (result) {
-                    return "Age: " + (new Date().getFullYear() - result.attributes.born);
+                    return "Age: " + (new Date().getFullYear() - result.attributes.born.toInt());
                 });
 
             }
