@@ -1,11 +1,11 @@
-// https://d3js.org v7.8.5 Copyright 2010-2023 Mike Bostock
+// https://d3js.org v7.9.0 Copyright 2010-2023 Mike Bostock
 (function (global, factory) {
 typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports) :
 typeof define === 'function' && define.amd ? define(['exports'], factory) :
 (global = typeof globalThis !== 'undefined' ? globalThis : global || self, factory(global.d3 = global.d3 || {}));
 })(this, (function (exports) { 'use strict';
 
-var version = "7.8.5";
+var version = "7.9.0";
 
 function ascending$3(a, b) {
   return a == null || b == null ? NaN : a < b ? -1 : a > b ? 1 : a >= b ? 0 : NaN;
@@ -7040,7 +7040,7 @@ class Delaunator {
         this._hullPrev = new Uint32Array(n); // edge to prev edge
         this._hullNext = new Uint32Array(n); // edge to next edge
         this._hullTri = new Uint32Array(n); // edge to adjacent triangle
-        this._hullHash = new Int32Array(this._hashSize).fill(-1); // angular edge hash
+        this._hullHash = new Int32Array(this._hashSize); // angular edge hash
 
         // temporary arrays for sorting points
         this._ids = new Uint32Array(n);
@@ -7071,11 +7071,10 @@ class Delaunator {
         const cx = (minX + maxX) / 2;
         const cy = (minY + maxY) / 2;
 
-        let minDist = Infinity;
         let i0, i1, i2;
 
         // pick a seed point close to the center
-        for (let i = 0; i < n; i++) {
+        for (let i = 0, minDist = Infinity; i < n; i++) {
             const d = dist(cx, cy, coords[2 * i], coords[2 * i + 1]);
             if (d < minDist) {
                 i0 = i;
@@ -7085,10 +7084,8 @@ class Delaunator {
         const i0x = coords[2 * i0];
         const i0y = coords[2 * i0 + 1];
 
-        minDist = Infinity;
-
         // find the point closest to the seed
-        for (let i = 0; i < n; i++) {
+        for (let i = 0, minDist = Infinity; i < n; i++) {
             if (i === i0) continue;
             const d = dist(i0x, i0y, coords[2 * i], coords[2 * i + 1]);
             if (d < minDist && d > 0) {
@@ -7124,9 +7121,10 @@ class Delaunator {
             let j = 0;
             for (let i = 0, d0 = -Infinity; i < n; i++) {
                 const id = this._ids[i];
-                if (this._dists[id] > d0) {
+                const d = this._dists[id];
+                if (d > d0) {
                     hull[j++] = id;
-                    d0 = this._dists[id];
+                    d0 = d;
                 }
             }
             this.hull = hull.subarray(0, j);
@@ -10460,7 +10458,7 @@ function circleRadius(cosRadius, point) {
 function circle$1() {
   var center = constant$3([0, 0]),
       radius = constant$3(90),
-      precision = constant$3(6),
+      precision = constant$3(2),
       ring,
       rotate,
       stream = {point: point};
@@ -10914,7 +10912,7 @@ function clipAntimeridianInterpolate(from, to, direction, stream) {
 
 function clipCircle(radius) {
   var cr = cos$1(radius),
-      delta = 6 * radians,
+      delta = 2 * radians,
       smallRadius = cr > 0,
       notHemisphere = abs$1(cr) > epsilon$1; // TODO optimise for this common case
 
@@ -17043,6 +17041,8 @@ var Accent = colors("7fc97fbeaed4fdc086ffff99386cb0f0027fbf5b17666666");
 
 var Dark2 = colors("1b9e77d95f027570b3e7298a66a61ee6ab02a6761d666666");
 
+var observable10 = colors("4269d0efb118ff725c6cc5b03ca951ff8ab7a463f297bbf59c6b4e9498a0");
+
 var Paired = colors("a6cee31f78b4b2df8a33a02cfb9a99e31a1cfdbf6fff7f00cab2d66a3d9affff99b15928");
 
 var Pastel1 = colors("fbb4aeb3cde3ccebc5decbe4fed9a6ffffcce5d8bdfddaecf2f2f2");
@@ -20441,6 +20441,7 @@ exports.schemeDark2 = Dark2;
 exports.schemeGnBu = scheme$f;
 exports.schemeGreens = scheme$4;
 exports.schemeGreys = scheme$3;
+exports.schemeObservable10 = observable10;
 exports.schemeOrRd = scheme$e;
 exports.schemeOranges = scheme;
 exports.schemePRGn = scheme$p;
