@@ -1,10 +1,10 @@
 {
   "name": "popoto-examples",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "dependencies": {
     "d3": "7.9.0",
-    "neo4j-driver-lite": "^5.22.0",
-    "popoto": "^4.0.6",
+    "neo4j-driver-lite": "^5.26.0",
+    "popoto": "^4.0.7",
     "vis": "^4.21.0-EOL"
   },
   "nhogs": {
